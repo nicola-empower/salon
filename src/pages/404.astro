@@ -1,0 +1,147 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="404 - Page Not Found">
+    <main class="error-page">
+        <div class="content-wrapper">
+            <div class="visual-container">
+                <div class="floating-404">404</div>
+                <div class="sleep-icon">😴</div>
+            </div>
+
+            <h1>Beauty Sleep</h1>
+            <p class="subtitle">Oops! This page seems to be taking a nap.</p>
+            <p class="description">
+                While we wake it up, why not browse our treatments or book
+                yourself in for some relaxation?
+            </p>
+
+            <div class="action-buttons">
+                <a href="/" class="btn-primary">Return Home</a>
+                <a href="/booking" class="btn-secondary">Book Appointment</a>
+            </div>
+        </div>
+    </main>
+</Layout>
+
+<style>
+    .error-page {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 2rem;
+        background: radial-gradient(
+            circle at center,
+            rgba(var(--color-gold-rgb), 0.05) 0%,
+            transparent 70%
+        );
+    }
+
+    .content-wrapper {
+        max-width: 600px;
+    }
+
+    .visual-container {
+        position: relative;
+        height: 200px;
+        margin-bottom: 2rem;
+    }
+
+    .floating-404 {
+        font-size: 8rem;
+        font-weight: 200;
+        color: var(--color-gold);
+        opacity: 0.2;
+        font-family: var(--font-heading);
+        animation: float 6s ease-in-out infinite;
+    }
+
+    .sleep-icon {
+        font-size: 4rem;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        animation: pulse 3s ease-in-out infinite;
+    }
+
+    h1 {
+        font-family: var(--font-heading);
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        color: var(--color-gold);
+    }
+
+    .subtitle {
+        font-size: 1.25rem;
+        color: white;
+        margin-bottom: 1rem;
+    }
+
+    .description {
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 2.5rem;
+        line-height: 1.6;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .btn-primary {
+        background: var(--color-gold);
+        color: black;
+        padding: 0.75rem 2rem;
+        text-decoration: none;
+        border-radius: 50px;
+        font-weight: 500;
+        transition: transform 0.2s;
+    }
+
+    .btn-secondary {
+        border: 1px solid var(--color-gold);
+        color: var(--color-gold);
+        padding: 0.75rem 2rem;
+        text-decoration: none;
+        border-radius: 50px;
+        font-weight: 500;
+        transition: background 0.2s;
+    }
+
+    .btn-primary:hover,
+    .btn-secondary:hover {
+        transform: translateY(-2px);
+    }
+
+    .btn-secondary:hover {
+        background: rgba(var(--color-gold-rgb), 0.1);
+    }
+
+    @keyframes float {
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-20px);
+        }
+    }
+
+    @keyframes pulse {
+        0%,
+        100% {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+        50% {
+            transform: translate(-50%, -50%) scale(1.1);
+            opacity: 0.8;
+        }
+    }
+</style>

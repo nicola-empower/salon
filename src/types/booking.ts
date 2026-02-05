@@ -10,6 +10,10 @@ export interface StaffProfile {
     specialties: string[];
     bio: string;
     yearsExperience: number;
+    age: number;
+    hobby: string;
+    qualifications: string[];
+    talkPoint: string;
     workingHours: Record<string, { start: string; end: string } | null>;
     holidayDates: string[]; // ISO date strings
 }

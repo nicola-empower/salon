@@ -1,0 +1,143 @@
+---
+import { MEMBERSHIP_TIERS } from "../data/membership-data";
+
+const features = [
+    {
+        name: "Monthly Services",
+        bronze: "1x Blow Dry",
+        silver: "2x Blow Dry / 1x Cut",
+        gold: "1x Cut & Colour",
+        platinum: "Unlimited Hair + Facial",
+    },
+    {
+        name: "Retail Discount",
+        bronze: "5%",
+        silver: "10%",
+        gold: "15%",
+        platinum: "20%",
+    },
+    {
+        name: "Booking Priority",
+        bronze: "3 Days",
+        silver: "7 Days",
+        gold: "14 Days",
+        platinum: "Guaranteed (24h)",
+    },
+    {
+        name: "Birthday Gift",
+        bronze: "-",
+        silver: "£20 Voucher",
+        gold: "£50 Voucher",
+        platinum: "Luxury Hamper",
+    },
+    {
+        name: "Beverages",
+        bronze: "Tea/Coffee",
+        silver: "Specialty",
+        gold: "Prosecco/Wine",
+        platinum: "Champagne/Cocktails",
+    },
+    {
+        name: "Guest Passes",
+        bronze: "-",
+        silver: "1 / year",
+        gold: "2 / year",
+        platinum: "4 / year",
+    },
+    {
+        name: "Events",
+        bronze: "-",
+        silver: "Early Access",
+        gold: "VIP Invites",
+        platinum: "Private Hosting",
+    },
+];
+---
+
+<div class="table-container" data-gsap-fade-up>
+    <table class="benefits-table">
+        <thead>
+            <tr>
+                <th>Feature</th>
+                {
+                    MEMBERSHIP_TIERS.map((tier) => (
+                        <th style={`color: ${tier.color}`}>{tier.name}</th>
+                    ))
+                }
+            </tr>
+        </thead>
+        <tbody>
+            {
+                features.map((feature, index) => (
+                    <tr style={{ transitionDelay: `${index * 50}ms` }}>
+                        <td class="feature-name">{feature.name}</td>
+                        <td class="bronze">{feature.bronze}</td>
+                        <td class="silver">{feature.silver}</td>
+                        <td class="gold">{feature.gold}</td>
+                        <td class="platinum">{feature.platinum}</td>
+                    </tr>
+                ))
+            }
+        </tbody>
+    </table>
+</div>
+
+<style>
+    .table-container {
+        overflow-x: auto;
+        border-radius: var(--radius-lg);
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        margin-top: 4rem;
+    }
+
+    .benefits-table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 800px; /* Force scroll on mobile */
+    }
+
+    th,
+    td {
+        padding: 1.5rem;
+        text-align: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    th:first-child,
+    td:first-child {
+        text-align: left;
+        padding-left: 2rem;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.8);
+        position: sticky;
+        left: 0;
+        background: var(--color-bg); /* Match bg to hide scrolling content */
+        z-index: 1;
+        border-right: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    th {
+        font-family: var(--font-heading);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        font-size: 0.9rem;
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
+
+    td {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.95rem;
+    }
+
+    tr:last-child td {
+        border-bottom: none;
+    }
+
+    tr:hover td {
+        background: rgba(255, 255, 255, 0.02);
+    }
+
+    /* Highlight column matching the popular tier if desired, or simpler styles */
+</style>

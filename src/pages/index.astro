@@ -30,28 +30,29 @@ const categories = [
 		link: "/treatments#nails",
 	},
 ];
+
+import MeetTeam from "../components/MeetTeam.astro";
+import ClientStories from "../components/ClientStories.astro";
 ---
 
 <Layout title="Home">
 	<main>
 		<!-- Hero Section -->
-		<section class="hero" data-gsap-hero>
+		<section class="hero">
 			<div class="hero-bg">
 				<img src={heroImage.src} alt="Luxury Salon Interior" />
 				<div class="overlay"></div>
 			</div>
 
 			<div class="container hero-content">
-				<h1 class="fade-in-up">The Salon</h1>
-				<p class="subtitle fade-in-up delay-1">
-					Where Beauty Meets Luxury
-				</p>
-				<p class="description fade-in-up delay-2">
+				<h1>The Salon</h1>
+				<p class="subtitle">Where Beauty Meets Luxury</p>
+				<p class="description">
 					A comprehensive beauty and wellness destination. From
 					advanced aesthetics to holistic therapy, we offer over 55+
 					treatments curated for your transformation.
 				</p>
-				<div class="cta-group fade-in-up delay-3">
+				<div class="cta-group">
 					<a href="/book" class="btn btn-primary">Book Appointment</a>
 					<a href="/treatments" class="btn btn-outline-light"
 						>View Menu</a
@@ -61,14 +62,14 @@ const categories = [
 		</section>
 
 		<!-- Category Showcase -->
-		<section class="section bg-dark" data-gsap-fade-up>
+		<section class="section bg-dark">
 			<div class="container">
 				<h2 class="section-title text-center">Our Services</h2>
 				<p class="text-center subtitle-text">
 					Explore our comprehensive range of treatments
 				</p>
 
-				<div class="category-grid" data-gsap-stagger>
+				<div class="category-grid">
 					{
 						categories.map((cat) => (
 							<a href={cat.link} class="category-card">
@@ -93,7 +94,7 @@ const categories = [
 		<section class="section ai-spotlight">
 			<div class="container">
 				<div class="spotlight-content">
-					<div class="spotlight-text" data-gsap-slide-left>
+					<div class="spotlight-text">
 						<span class="badge">✨ New Feature</span>
 						<h2>AI-Powered Skin Consultation</h2>
 						<p>
@@ -113,7 +114,7 @@ const categories = [
 							>Try AI Consultation Free</a
 						>
 					</div>
-					<div class="spotlight-visual" data-gsap-slide-right>
+					<div class="spotlight-visual">
 						<div class="ai-demo-card">
 							<div class="demo-header">AI Analysis</div>
 							<div class="demo-content">
@@ -129,12 +130,18 @@ const categories = [
 			</div>
 		</section>
 
+		<!-- Meet The Team -->
+		<MeetTeam />
+
+		<!-- Client Stories -->
+		<ClientStories />
+
 		<!-- Featured Signature Treatments -->
-		<section class="section" data-gsap-fade-up>
+		<section class="section">
 			<div class="container">
 				<h2 class="section-title text-center">Signature Treatments</h2>
 
-				<div class="grid-3" data-gsap-stagger>
+				<div class="grid-3">
 					{
 						featuredTreatments.map((item) => (
 							<div class="card">

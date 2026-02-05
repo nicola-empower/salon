@@ -73,10 +73,18 @@ const bookingsByStaff = allStaff.map((staff) => ({
                                         class="client-avatar"
                                         style="width: 40px; height: 40px; font-size: 1rem;"
                                     >
-                                        {staff.name
-                                            .split(" ")
-                                            .map((n) => n[0])
-                                            .join("")}
+                                        {staff.photo ? (
+                                            <img
+                                                src={staff.photo}
+                                                alt={staff.name}
+                                                style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;"
+                                            />
+                                        ) : (
+                                            staff.name
+                                                .split(" ")
+                                                .map((n) => n[0])
+                                                .join("")
+                                        )}
                                     </div>
                                     <div>
                                         <h3>{staff.name}</h3>

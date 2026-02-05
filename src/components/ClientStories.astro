@@ -1,0 +1,222 @@
+---
+const stories = [
+    {
+        name: "Sophie",
+        service: "Balayage Transformation",
+        duration: "0:45",
+        thumbnail: "/video_thumb_sophie_1770327650953.png",
+    },
+    {
+        name: "James",
+        service: "Executive Grooming",
+        duration: "0:30",
+        thumbnail: "/video_thumb_james_1770327664646.png",
+    },
+    {
+        name: "Elena",
+        service: "Holistic Facial",
+        duration: "1:15",
+        thumbnail: "/video_thumb_elapa_1770327677943.png",
+    },
+];
+---
+
+<section class="stories-section">
+    <div class="container">
+        <div class="heading text-center">
+            <h2 class="section-title">Client Stories</h2>
+            <p class="subtitle-text">
+                Real results, real people, real transformations
+            </p>
+        </div>
+
+        <div class="stories-grid">
+            {
+                stories.map((story) => (
+                    <div class="story-card">
+                        <div class="thumbnail-wrapper">
+                            <img
+                                src={story.thumbnail}
+                                alt={`${story.name}'s story`}
+                                class="thumbnail"
+                            />
+                            <div class="play-overlay">
+                                <button
+                                    class="play-btn"
+                                    aria-label={`Play ${story.name}'s story`}
+                                >
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                        fill="currentColor"
+                                    >
+                                        <path d="M8 5v14l11-7z" />
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="duration-badge">{story.duration}</div>
+                        </div>
+                        <div class="story-info">
+                            <h3 class="client-name">{story.name}</h3>
+                            <p class="service-name">{story.service}</p>
+                        </div>
+                    </div>
+                ))
+            }
+        </div>
+
+        <div class="portfolio-note">
+            <span class="info-icon">ⓘ</span>
+            <p>
+                <strong>Portfolio Concept:</strong> These video cards are interactive
+                mockups designed to demonstrate the "Stories" UI pattern. On a live
+                production site, these would load optimised video assets from a CDN
+                or hosting service.
+            </p>
+        </div>
+    </div>
+</section>
+
+<style>
+    .stories-section {
+        padding: 6rem 0;
+        overflow: hidden;
+    }
+
+    .heading {
+        margin-bottom: 4rem;
+        text-align: center;
+    }
+
+    .stories-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+    }
+
+    .story-card {
+        cursor: pointer;
+        transition: transform 0.3s ease;
+    }
+
+    .story-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .thumbnail-wrapper {
+        position: relative;
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        aspect-ratio: 16/9;
+        margin-bottom: 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .thumbnail {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .story-card:hover .thumbnail {
+        transform: scale(1.05);
+    }
+
+    .play-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.3s ease;
+    }
+
+    .story-card:hover .play-overlay {
+        background: rgba(0, 0, 0, 0.4);
+    }
+
+    .play-btn {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        color: var(--color-accent);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .play-btn svg {
+        margin-left: 4px; /* Optical centering */
+    }
+
+    .story-card:hover .play-btn {
+        transform: scale(1.2);
+    }
+
+    .duration-badge {
+        position: absolute;
+        bottom: 1rem;
+        right: 1rem;
+        background: rgba(0, 0, 0, 0.7);
+        padding: 0.25rem 0.5rem;
+        border-radius: var(--radius-sm);
+        font-size: 0.75rem;
+        font-weight: 600;
+        backdrop-filter: blur(4px);
+    }
+
+    .story-info {
+        padding: 0 0.5rem;
+    }
+
+    .client-name {
+        font-size: 1.2rem;
+        margin: 0 0 0.25rem 0;
+    }
+
+    .service-name {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.9rem;
+    }
+
+    .portfolio-note {
+        margin-top: 4rem;
+        padding: 1rem 1.5rem;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: var(--radius-md);
+        display: flex;
+        gap: 1rem;
+        align-items: flex-start;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+        color: var(--color-text-secondary);
+        font-size: 0.9rem;
+    }
+
+    .info-icon {
+        color: var(--color-accent);
+        font-weight: bold;
+        font-size: 1.2rem;
+        line-height: 1;
+    }
+
+    .portfolio-note strong {
+        color: var(--color-accent);
+        font-weight: 600;
+    }
+
+    .portfolio-note p {
+        margin: 0;
+        line-height: 1.5;
+    }
+</style>

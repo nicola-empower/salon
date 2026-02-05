@@ -145,6 +145,11 @@ const SkinConsultation = () => {
                     <h2>AI Skin Analysis</h2>
                     <p className="subtitle">Upload a clear photo of your face for personalised treatment recommendations</p>
 
+                    <div className="privacy-badge">
+                        <span className="icon">🔒</span>
+                        <span><strong>Privacy First:</strong> Images are processed securely and never stored.</span>
+                    </div>
+
                     {error && (
                         <div className="error-banner">
                             <div className="error-banner">

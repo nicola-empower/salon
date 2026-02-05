@@ -117,6 +117,11 @@ const BookingSystem = () => {
                         ))}
                     </div>
                 )}
+                {selectedDate && (
+                    <p className="text-xs text-center mt-2 muted">
+                        <span className="icon">✨</span> Includes 15min sanitisation buffer
+                    </p>
+                )}
             </div>
             <div className="actions">
                 <button className="btn btn-outline" onClick={handleBack}>Back</button>

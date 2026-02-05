@@ -1,0 +1,101 @@
+---
+import Layout from "../layouts/Layout.astro";
+import MembershipCard from "../components/MembershipCard.astro";
+import BenefitsTable from "../components/BenefitsTable.astro";
+import { MEMBERSHIP_TIERS } from "../data/membership-data";
+---
+
+<Layout title="Membership Tiers | The Salon">
+    <main class="page-content">
+        <!-- Hero Section -->
+        <section class="membership-hero">
+            <div class="container text-center">
+                <span
+                    class="eyebrow"
+                    style="display: block; margin-bottom: 1rem; color: var(--color-accent); letter-spacing: 0.2em; text-transform: uppercase; font-size: 0.8rem;"
+                    >Exclusive Benefits</span
+                >
+                <h1
+                    style="font-size: clamp(2.5rem, 5vw, 4rem); margin-bottom: 1.5rem;"
+                >
+                    Elevate Your Experience
+                </h1>
+                <p
+                    class="hero-text"
+                    style="max-width: 600px; margin: 0 auto; color: rgba(255,255,255,0.7); font-size: 1.1rem; line-height: 1.6;"
+                >
+                    Join our exclusive membership programme to enjoy priority
+                    access, complimentary treatments, and substantial savings on
+                    your favourite services.
+                </p>
+            </div>
+        </section>
+
+        <!-- Tiers Grid -->
+        <section class="section" style="padding-top: 0;">
+            <div class="container">
+                <div class="tiers-grid">
+                    {
+                        MEMBERSHIP_TIERS.map((tier) => (
+                            <div class="tier-wrapper">
+                                <MembershipCard tier={tier} />
+                            </div>
+                        ))
+                    }
+                </div>
+            </div>
+        </section>
+
+        <!-- Benefits Comparison Table -->
+        <section class="section" style="padding-top: 0;">
+            <div class="container">
+                <div class="text-center" style="margin-bottom: 3rem;">
+                    <h2 class="section-title">Compare Benefits</h2>
+                    <p style="color: rgba(255,255,255,0.7);">
+                        Detailed breakdown of what's included in each tier
+                    </p>
+                </div>
+                <BenefitsTable />
+            </div>
+        </section>
+
+        <!-- FAQ or Additional Info (Optional, can be added later) -->
+        <section class="section text-center">
+            <div class="container">
+                <h2 style="margin-bottom: 1.5rem;">
+                    Corporate & Gift Memberships
+                </h2>
+                <p style="color: rgba(255,255,255,0.7); margin-bottom: 2rem;">
+                    Looking to reward your team or treat a loved one? We offer
+                    bespoke corporate packages and gift memberships.
+                </p>
+                <a href="/contact" class="btn btn-outline">Enquire Now</a>
+            </div>
+        </section>
+    </main>
+</Layout>
+
+<style>
+    .page-content {
+        padding-top: 8rem;
+    }
+
+    .membership-hero {
+        padding: 4rem 0 6rem;
+    }
+
+    .tiers-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+        align-items: stretch;
+    }
+
+    /* Make the popular tier pop out slightly on desktop */
+    @media (min-width: 1024px) {
+        .tier-wrapper:nth-child(2) {
+            transform: scale(1.05);
+            z-index: 10;
+        }
+    }
+</style>

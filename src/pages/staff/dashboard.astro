@@ -10,13 +10,27 @@ import "../../styles/calendar.css";
 
 // For demo, use first staff member
 const currentStaff = STAFF_PROFILES[0];
-const staffBookings = getStaffBookings(currentStaff.id);
+
+// Generate bookings for a wide window (past month + future 6 months)
+// This ensures the calendar is populated even if the user navigates forward
+const now = new Date();
+const startDate = new Date(now);
+startDate.setDate(now.getDate() - 30);
+const endDate = new Date(now);
+endDate.setDate(now.getDate() + 180); // 6 months ahead
+
+const staffBookings = getStaffBookings(
+    currentStaff.id,
+    startDate.toISOString().split("T")[0],
+    endDate.toISOString().split("T")[0],
+);
 
 // Get current week start (Monday)
-const now = new Date();
+// Reuse existing 'now' variable for week calculation
 const dayOfWeek = now.getDay();
 const diff = now.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
-const weekStart = new Date(now.setDate(diff));
+const weekStart = new Date(now); // Create copy to avoid mutating 'now'
+weekStart.setDate(diff);
 weekStart.setHours(0, 0, 0, 0);
 
 // Calculate stats
@@ -49,10 +63,18 @@ const weeklyRevenue = thisWeekBookings.reduce((sum, b) => sum + b.price, 0);
                             style="width: 60px; height: 60px; font-size: 1.5rem;"
                         >
                             {
-                                currentStaff.name
-                                    .split(" ")
-                                    .map((n) => n[0])
-                                    .join("")
+                                currentStaff.photo ? (
+                                    <img
+                                        src={currentStaff.photo}
+                                        alt={currentStaff.name}
+                                        style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;"
+                                    />
+                                ) : (
+                                    currentStaff.name
+                                        .split(" ")
+                                        .map((n) => n[0])
+                                        .join("")
+                                )
                             }
                         </div>
                         <div>
@@ -126,18 +148,6 @@ const weeklyRevenue = thisWeekBookings.reduce((sum, b) => sum + b.price, 0);
 
                 <!-- Calendar Section -->
                 <div style="margin-top: 3rem;">
-                    <div
-                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;"
-                    >
-                        <h2>Your Weekly Schedule</h2>
-                        <div style="display: flex; gap: 1rem;">
-                            <button class="btn btn-outline"
-                                >← Previous Week</button
-                            >
-                            <button class="btn btn-outline">Next Week →</button>
-                        </div>
-                    </div>
-
                     <WeeklyCalendar
                         client:load
                         staffId={currentStaff.id}

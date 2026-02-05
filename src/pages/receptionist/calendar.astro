@@ -1,0 +1,157 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import WeeklyCalendar from "../../components/Calendar/WeeklyCalendar";
+import { STAFF_PROFILES, getStaffBookings } from "../../data/staff-data";
+import "../../styles/calendar.css";
+
+// Get selected staff from query param or default to first
+const staffId = Astro.url.searchParams.get("staffId") || STAFF_PROFILES[0].id;
+const currentStaff =
+    STAFF_PROFILES.find((s) => s.id === staffId) || STAFF_PROFILES[0];
+
+// Generate bookings for a wide window (past month + future 6 months)
+const now = new Date();
+const startDate = new Date(now);
+startDate.setDate(now.getDate() - 30);
+const endDate = new Date(now);
+endDate.setDate(now.getDate() + 180); // 6 months ahead
+
+const bookings = getStaffBookings(
+    currentStaff.id,
+    startDate.toISOString().split("T")[0],
+    endDate.toISOString().split("T")[0],
+);
+
+// Calculate week start
+const dayOfWeek = now.getDay();
+const diff = now.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
+const weekStart = new Date(now);
+weekStart.setDate(diff);
+weekStart.setHours(0, 0, 0, 0);
+---
+
+<Layout title="Staff Calendar | Reception">
+    <main class="page-content">
+        <section class="section">
+            <div class="container">
+                <div
+                    class="page-header"
+                    style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;"
+                >
+                    <div>
+                        <a href="/receptionist/dashboard" class="back-link"
+                            >← Back to Dashboard</a
+                        >
+                        <h1 style="margin-top: 0.5rem;">Staff Calendar</h1>
+                    </div>
+                </div>
+
+                <!-- Staff Selector -->
+                <div class="staff-selector-card">
+                    <label for="staff-select">Viewing Schedule For:</label>
+                    <div class="select-wrapper">
+                        <select
+                            id="staff-select"
+                            onchange="window.location.href = '?staffId=' + this.value"
+                        >
+                            {
+                                STAFF_PROFILES.map((staff) => (
+                                    <option
+                                        value={staff.id}
+                                        selected={staff.id === currentStaff.id}
+                                    >
+                                        {staff.name} - {staff.role}
+                                    </option>
+                                ))
+                            }
+                        </select>
+                        <div class="staff-meta">
+                            {bookings.length} bookings found for next 6 months
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Calendar -->
+                <div class="calendar-wrapper">
+                    <WeeklyCalendar
+                        client:load
+                        staffId={currentStaff.id}
+                        weekStart={weekStart}
+                        bookings={bookings}
+                    />
+                </div>
+            </div>
+        </section>
+    </main>
+</Layout>
+
+<style>
+    .back-link {
+        color: rgba(255, 255, 255, 0.6);
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: color 0.2s;
+    }
+
+    .back-link:hover {
+        color: var(--color-accent);
+    }
+
+    .staff-selector-card {
+        background: var(--color-surface);
+        padding: 1.5rem;
+        border-radius: var(--radius-lg);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        margin-bottom: 2rem;
+    }
+
+    .staff-selector-card label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    .select-wrapper {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    select {
+        padding: 0.75rem 1rem;
+        background: rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: var(--radius-md);
+        color: white;
+        font-size: 1rem;
+        min-width: 300px;
+        cursor: pointer;
+    }
+
+    select:focus {
+        outline: none;
+        border-color: var(--color-accent);
+    }
+
+    .staff-meta {
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 0.9rem;
+    }
+
+    .calendar-wrapper {
+        animation: fadeIn 0.5s ease-out;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>

@@ -1,0 +1,274 @@
+---
+import { STAFF_PROFILES } from "../data/staff-data";
+---
+
+<section class="section meet-team">
+    <div class="container">
+        <div class="heading text-center">
+            <h2 class="section-title">Meet The Team</h2>
+            <p class="subtitle-text">
+                The talented experts behind your transformation
+            </p>
+        </div>
+
+        <div class="team-grid">
+            {
+                STAFF_PROFILES.map((staff) => (
+                    <div class="team-card">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <div class="image-wrapper">
+                                    {staff.photo ? (
+                                        <img
+                                            src={staff.photo}
+                                            alt={staff.name}
+                                            class="staff-photo"
+                                            width="150"
+                                            height="150"
+                                        />
+                                    ) : (
+                                        <div class="placeholder-avatar">
+                                            {staff.name
+                                                .split(" ")
+                                                .map((n) => n[0])
+                                                .join("")}
+                                        </div>
+                                    )}
+                                </div>
+                                <div class="info">
+                                    <h3>{staff.name}</h3>
+                                    <span class="role">{staff.role}</span>
+                                </div>
+                            </div>
+
+                            <div class="card-back">
+                                <div class="back-content">
+                                    <h3 class="name-small">{staff.name}</h3>
+                                    <span class="age">Age: {staff.age}</span>
+
+                                    <div class="detail-group">
+                                        <span class="label">
+                                            Qualifications
+                                        </span>
+                                        <ul class="qual-list">
+                                            {staff.qualifications
+                                                .slice(0, 2)
+                                                .map((q) => (
+                                                    <li>{q}</li>
+                                                ))}
+                                            {staff.qualifications.length >
+                                                2 && (
+                                                <li>
+                                                    +{" "}
+                                                    {staff.qualifications
+                                                        .length - 2}{" "}
+                                                    more
+                                                </li>
+                                            )}
+                                        </ul>
+                                    </div>
+
+                                    <div class="detail-group">
+                                        <span class="label">
+                                            Ask me about...
+                                        </span>
+                                        <p class="talk-point">
+                                            "{staff.talkPoint}"
+                                        </p>
+                                    </div>
+
+                                    <div class="hobby-tag">
+                                        <span class="icon">♥</span>{" "}
+                                        {staff.hobby}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+</section>
+
+<style>
+    .meet-team {
+        padding: 6rem 0;
+        background: linear-gradient(
+            to bottom,
+            var(--color-bg),
+            var(--color-surface)
+        );
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .heading {
+        margin-bottom: 4rem;
+    }
+
+    .team-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 2rem;
+    }
+
+    .team-card {
+        height: 400px;
+        perspective: 1000px;
+        cursor: pointer;
+    }
+
+    .card-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        transition: transform 0.8s;
+        transform-style: preserve-3d;
+    }
+
+    .team-card:hover .card-inner {
+        transform: rotateY(180deg);
+    }
+
+    .card-front,
+    .card-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    /* Front Design */
+    .card-front {
+        background: var(--color-surface);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .image-wrapper {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        margin-bottom: 2rem;
+        position: relative;
+        border: 2px solid var(--color-accent);
+        padding: 5px;
+    }
+
+    .staff-photo {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+
+    .placeholder-avatar {
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.1),
+            rgba(255, 255, 255, 0.05)
+        );
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+        font-family: var(--font-serif);
+        color: var(--color-accent);
+    }
+
+    .info h3 {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .role {
+        color: var(--color-text-secondary);
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        letter-spacing: 0.1em;
+    }
+
+    /* Back Design */
+    .card-back {
+        background: var(--color-accent);
+        color: var(--color-bg);
+        transform: rotateY(180deg);
+        padding: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .back-content {
+        text-align: left;
+        width: 100%;
+    }
+
+    .name-small {
+        font-size: 1.2rem;
+        margin-bottom: 0.25rem;
+        color: var(--color-bg);
+    }
+
+    .age {
+        font-size: 0.9rem;
+        opacity: 0.8;
+        display: block;
+        margin-bottom: 1.5rem;
+    }
+
+    .detail-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .label {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        opacity: 0.7;
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+
+    .qual-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        font-size: 0.9rem;
+    }
+
+    .qual-list li {
+        margin-bottom: 0.25rem;
+    }
+
+    .talk-point {
+        font-style: italic;
+        font-size: 1rem;
+        line-height: 1.4;
+    }
+
+    .hobby-tag {
+        margin-top: auto;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: rgba(0, 0, 0, 0.1);
+        padding: 0.5rem 1rem;
+        border-radius: var(--radius-full);
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+</style>

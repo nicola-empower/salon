@@ -1,44 +1,131 @@
-/* GSAP Animation Initial States */
+/* Native CSS Animations */
+/* These work in tandem with native-animations.ts which adds the .in-view class */
 
+/* Base transitions for all animated elements */
+[data-gsap-fade-up],
+[data-gsap-slide-left],
+[data-gsap-slide-right],
+[data-gsap-scale-in],
+[data-gsap-stagger]>* {
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+
+/* 1. Fade Up */
 [data-gsap-fade-up] {
   opacity: 0;
+  transform: translateY(30px);
 }
 
-[data-gsap-stagger]>* {
-  opacity: 0;
+[data-gsap-fade-up].in-view {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-[data-gsap-scale-in] {
-  opacity: 0;
-  transform: scale(0.95);
-}
-
+/* 2. Slide Left (comes from right) */
 [data-gsap-slide-left] {
   opacity: 0;
+  transform: translateX(30px);
 }
 
+[data-gsap-slide-left].in-view {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* 3. Slide Right (comes from left) */
 [data-gsap-slide-right] {
   opacity: 0;
+  transform: translateX(-30px);
 }
 
-/* Prevent layout shift */
+[data-gsap-slide-right].in-view {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* 4. Scale In */
+[data-gsap-scale-in] {
+  opacity: 0;
+  transform: scale(0.92);
+}
+
+[data-gsap-scale-in].in-view {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* 5. Staggered Children */
+/* We target the children directly via CSS for simplicity in this native version */
+[data-gsap-stagger]>* {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* When the parent is in-view, animate children */
+[data-gsap-stagger].in-view>* {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger delays for up to 10 items */
+[data-gsap-stagger].in-view>*:nth-child(1) {
+  transition-delay: 0.1s;
+}
+
+[data-gsap-stagger].in-view>*:nth-child(2) {
+  transition-delay: 0.2s;
+}
+
+[data-gsap-stagger].in-view>*:nth-child(3) {
+  transition-delay: 0.3s;
+}
+
+[data-gsap-stagger].in-view>*:nth-child(4) {
+  transition-delay: 0.4s;
+}
+
+[data-gsap-stagger].in-view>*:nth-child(5) {
+  transition-delay: 0.5s;
+}
+
+[data-gsap-stagger].in-view>*:nth-child(6) {
+  transition-delay: 0.6s;
+}
+
+[data-gsap-stagger].in-view>*:nth-child(7) {
+  transition-delay: 0.7s;
+}
+
+[data-gsap-stagger].in-view>*:nth-child(8) {
+  transition-delay: 0.8s;
+}
+
+[data-gsap-stagger].in-view>*:nth-child(9) {
+  transition-delay: 0.9s;
+}
+
+[data-gsap-stagger].in-view>*:nth-child(10) {
+  transition-delay: 1.0s;
+}
+
+/* Parallax (Simplified for native - just a smooth scroll hint on the hero) */
 [data-gsap-parallax] {
+  /* Native parallax is tricky without JS, staying simple for stability */
   will-change: transform;
 }
 
-/* Accessibility: Disable animations for reduced motion */
+/* Accessibility */
 @media (prefers-reduced-motion: reduce) {
 
   [data-gsap-fade-up],
-  [data-gsap-stagger]>*,
-  [data-gsap-scale-in],
   [data-gsap-slide-left],
-  [data-gsap-slide-right] {
+  [data-gsap-slide-right],
+  [data-gsap-scale-in],
+  [data-gsap-stagger]>* {
     opacity: 1 !important;
     transform: none !important;
-  }
-
-  [data-gsap-parallax] {
-    transform: none !important;
+    transition: none !important;
+    animation: none !important;
   }
 }
