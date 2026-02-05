@@ -30,16 +30,25 @@ const { title } = Astro.props;
 		<slot />
 		<Footer />
 
-		<!-- GSAP Scroll Animations - Temporarily disabled -->
-		<!--
+		<!-- GSAP Scroll Animations -->
 		<script>
-			import { initScrollAnimations } from "../scripts/animations.ts";
+			import {
+				initScrollAnimations,
+				killScrollTriggers,
+			} from "../scripts/animations.ts";
 
-			// Initialize animations when DOM is ready
-			document.addEventListener("DOMContentLoaded", () => {
-				initScrollAnimations();
+			// Initialize animations on initial load and after view transitions
+			document.addEventListener("astro:page-load", () => {
+				// Small delay to ensure DOM is ready and layout is stable
+				setTimeout(() => {
+					initScrollAnimations();
+				}, 100);
+			});
+
+			// Cleanup before navigation to prevent memory leaks/conflicts
+			document.addEventListener("astro:before-swap", () => {
+				killScrollTriggers();
 			});
 		</script>
-		-->
 	</body>
 </html>

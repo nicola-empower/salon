@@ -1,12 +1,10 @@
 /* GSAP Animation Initial States */
 
-/* Temporarily disabled - uncomment when JS is confirmed working */
-/*
 [data-gsap-fade-up] {
   opacity: 0;
 }
 
-[data-gsap-stagger] > * {
+[data-gsap-stagger]>* {
   opacity: 0;
 }
 
@@ -22,26 +20,25 @@
 [data-gsap-slide-right] {
   opacity: 0;
 }
-*/
 
 /* Prevent layout shift */
 [data-gsap-parallax] {
-    will-change: transform;
+  will-change: transform;
 }
 
 /* Accessibility: Disable animations for reduced motion */
 @media (prefers-reduced-motion: reduce) {
 
-    [data-gsap-fade-up],
-    [data-gsap-stagger]>*,
-    [data-gsap-scale-in],
-    [data-gsap-slide-left],
-    [data-gsap-slide-right] {
-        opacity: 1 !important;
-        transform: none !important;
-    }
+  [data-gsap-fade-up],
+  [data-gsap-stagger]>*,
+  [data-gsap-scale-in],
+  [data-gsap-slide-left],
+  [data-gsap-slide-right] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
 
-    [data-gsap-parallax] {
-        transform: none !important;
-    }
+  [data-gsap-parallax] {
+    transform: none !important;
+  }
 }
