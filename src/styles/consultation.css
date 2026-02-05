@@ -46,6 +46,11 @@
     transition: all 0.3s ease;
     cursor: pointer;
     width: 100%;
+    color: white;
+    /* Ensure text is white */
+    text-align: center;
+    position: relative;
+    overflow: hidden;
 }
 
 .option-card:hover {

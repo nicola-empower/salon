@@ -1,0 +1,174 @@
+---
+import Layout from "../layouts/Layout.astro";
+import BeforeAfterSlider from "../components/BeforeAfterSlider";
+import "../styles/before-after.css";
+
+const beforeAfterResults = [
+    {
+        id: "1",
+        category: "Aesthetics",
+        treatment: "Advanced Facial Rejuvenation",
+        beforeImage: "/before-after/skincare-before.png",
+        afterImage: "/before-after/skincare-after.png",
+        testimonial:
+            "After 6 weeks of treatment, my skin has never looked better. The team was professional and the results speak for themselves!",
+        duration: "6 weeks",
+    },
+    {
+        id: "2",
+        category: "Skincare",
+        treatment: "HydraFacial Series",
+        beforeImage: "/before-after/skincare-before.png",
+        afterImage: "/before-after/skincare-after.png",
+        testimonial:
+            "The HydraFacial treatments transformed my skin. Reduced pores and such a healthy glow!",
+        duration: "4 weeks",
+    },
+    {
+        id: "3",
+        category: "Aesthetics",
+        treatment: "PRP Skin Renewal",
+        beforeImage: "/before-after/skincare-before.png",
+        afterImage: "/before-after/skincare-after.png",
+        testimonial:
+            "Natural, beautiful results. My skin texture has improved dramatically.",
+        duration: "8 weeks",
+    },
+];
+
+const categories = ["All", "Aesthetics", "Skincare", "Body & Wellness"];
+---
+
+<Layout title="Results Gallery">
+    <main class="page-content">
+        <section class="section">
+            <div class="container">
+                <div class="page-header text-center">
+                    <h1>Real Results</h1>
+                    <p class="subtitle-text">
+                        See the transformative results our clients have
+                        achieved. All images are from real clients who have
+                        consented to share their journey.
+                    </p>
+                    <p class="disclaimer-text">
+                        <small>
+                            ⚠️ Results may vary by individual. Images shown for
+                            demonstration purposes.
+                        </small>
+                    </p>
+                </div>
+
+                <!-- Category Filters -->
+                <div class="filter-controls">
+                    {
+                        categories.map((cat) => (
+                            <button
+                                class={`filter-btn ${cat === "All" ? "active" : ""}`}
+                                data-category={cat}
+                            >
+                                {cat}
+                            </button>
+                        ))
+                    }
+                </div>
+
+                <!-- Results Grid -->
+                <div class="results-grid">
+                    {
+                        beforeAfterResults.map((result) => (
+                            <div
+                                class="result-card"
+                                data-category={result.category}
+                            >
+                                <BeforeAfterSlider
+                                    client:load
+                                    beforeImage={result.beforeImage}
+                                    afterImage={result.afterImage}
+                                    alt={result.treatment}
+                                />
+                                <div class="result-info">
+                                    <span class="result-category">
+                                        {result.category}
+                                    </span>
+                                    <h3>{result.treatment}</h3>
+                                    {result.testimonial && (
+                                        <blockquote class="result-testimonial">
+                                            "{result.testimonial}"
+                                        </blockquote>
+                                    )}
+                                    {result.duration && (
+                                        <p class="result-duration">
+                                            📅 Treatment duration:{" "}
+                                            {result.duration}
+                                        </p>
+                                    )}
+                                </div>
+                            </div>
+                        ))
+                    }
+                </div>
+
+                <!-- CTA -->
+                <div class="text-center" style="margin-top: 4rem;">
+                    <p
+                        style="font-size: 1.2rem; margin-bottom: 2rem; color: rgba(255, 255, 255, 0.8);"
+                    >
+                        Ready to start your transformation?
+                    </p>
+                    <a href="/consultation" class="btn btn-primary btn-lg">
+                        Get Your Free AI Consultation
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Filter functionality
+        const filterButtons = document.querySelectorAll(".filter-btn");
+        const resultCards = document.querySelectorAll(".result-card");
+
+        filterButtons.forEach((button) => {
+            button.addEventListener("click", () => {
+                const category = button.getAttribute("data-category");
+
+                // Update active button
+                filterButtons.forEach((btn) => btn.classList.remove("active"));
+                button.classList.add("active");
+
+                // Filter cards
+                resultCards.forEach((card) => {
+                    const cardCategory = card.getAttribute("data-category");
+                    if (category === "All" || cardCategory === category) {
+                        card.style.display = "block";
+                    } else {
+                        card.style.display = "none";
+                    }
+                });
+            });
+        });
+    </script>
+</Layout>
+
+<style>
+    .page-header {
+        margin-bottom: 4rem;
+    }
+
+    .page-header h1 {
+        font-size: clamp(2.5rem, 5vw, 4rem);
+        margin-bottom: 1rem;
+    }
+
+    .subtitle-text {
+        max-width: 700px;
+        margin: 0 auto 1.5rem;
+        font-size: 1.1rem;
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    .disclaimer-text {
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 0.875rem;
+    }
+</style>

@@ -1,0 +1,414 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { MOCK_BOOKINGS } from "../../data/staff-data";
+import "../../styles/calendar.css";
+
+// Get unpaid bookings
+const unpaidBookings = MOCK_BOOKINGS.filter(
+    (b) => b.paymentStatus === "unpaid" || b.paymentStatus === "deposit",
+);
+---
+
+<Layout title="Payment Processing">
+    <main class="page-content">
+        <section class="section">
+            <div class="container">
+                <div style="margin-bottom: 2rem;">
+                    <a
+                        href="/receptionist/dashboard"
+                        style="color: rgba(255, 255, 255, 0.6); text-decoration: none;"
+                    >
+                        ← Back to Dashboard
+                    </a>
+                </div>
+
+                <h1 style="margin-bottom: 2rem;">Payment Processing</h1>
+
+                <!-- Payment Form -->
+                <div
+                    style="display: grid; grid-template-columns: 1fr 400px; gap: 2rem;"
+                >
+                    <!-- Unpaid Bookings -->
+                    <div>
+                        <h2 style="margin-bottom: 1.5rem;">Pending Payments</h2>
+
+                        <div class="payment-list">
+                            {
+                                unpaidBookings.map((booking) => (
+                                    <div class="payment-item">
+                                        <div class="payment-info">
+                                            <div class="payment-client">
+                                                {booking.clientName}
+                                            </div>
+                                            <div class="payment-treatment">
+                                                {booking.treatmentName}
+                                            </div>
+                                            <div class="payment-meta">
+                                                {booking.staffName} •{" "}
+                                                {new Date(
+                                                    booking.date,
+                                                ).toLocaleDateString(
+                                                    "en-GB",
+                                                )}{" "}
+                                                {booking.time}
+                                            </div>
+                                        </div>
+                                        <div class="payment-amount">
+                                            <div class="amount-label">
+                                                Amount Due
+                                            </div>
+                                            <div class="amount-value">
+                                                £{booking.price}
+                                            </div>
+                                            {booking.paymentStatus ===
+                                                "deposit" && (
+                                                <div class="amount-note">
+                                                    Deposit paid: £
+                                                    {(
+                                                        booking.price * 0.3
+                                                    ).toFixed(0)}
+                                                </div>
+                                            )}
+                                        </div>
+                                        <button
+                                            class="btn btn-primary"
+                                            onclick={`selectBooking('${booking.id}', '${booking.clientName}', ${booking.price})`}
+                                        >
+                                            Process Payment
+                                        </button>
+                                    </div>
+                                ))
+                            }
+
+                            {
+                                unpaidBookings.length === 0 && (
+                                    <div style="text-align: center; padding: 3rem; color: rgba(255, 255, 255, 0.6);">
+                                        All payments up to date! 🎉
+                                    </div>
+                                )
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Payment Terminal -->
+                    <div class="payment-terminal">
+                        <h3 style="margin-bottom: 1.5rem;">Payment Terminal</h3>
+
+                        <div id="paymentForm" style="display: none;">
+                            <div class="terminal-display">
+                                <div
+                                    class="terminal-client"
+                                    id="terminalClient"
+                                >
+                                    -
+                                </div>
+                                <div
+                                    class="terminal-amount"
+                                    id="terminalAmount"
+                                >
+                                    £0.00
+                                </div>
+                            </div>
+
+                            <div class="payment-method-selector">
+                                <button
+                                    class="payment-method-btn active"
+                                    data-method="card"
+                                >
+                                    <span style="font-size: 1.5rem;">💳</span>
+                                    <span>Card</span>
+                                </button>
+                                <button
+                                    class="payment-method-btn"
+                                    data-method="cash"
+                                >
+                                    <span style="font-size: 1.5rem;">💷</span>
+                                    <span>Cash</span>
+                                </button>
+                                <button
+                                    class="payment-method-btn"
+                                    data-method="online"
+                                >
+                                    <span style="font-size: 1.5rem;">📱</span>
+                                    <span>Online</span>
+                                </button>
+                            </div>
+
+                            <div class="card-simulator" id="cardSimulator">
+                                <div class="card-display">
+                                    <div class="card-chip"></div>
+                                    <div class="card-number">
+                                        **** **** **** 4242
+                                    </div>
+                                    <div class="card-name">
+                                        MOCK PAYMENT CARD
+                                    </div>
+                                </div>
+
+                                <div class="card-instructions">
+                                    <p>✓ Card inserted</p>
+                                    <p>✓ PIN verified</p>
+                                    <p
+                                        style="color: var(--color-accent); font-weight: 600;"
+                                    >
+                                        Ready to process
+                                    </p>
+                                </div>
+                            </div>
+
+                            <button
+                                class="btn btn-primary"
+                                style="width: 100%; margin-top: 1.5rem;"
+                                onclick="processPayment()"
+                            >
+                                Complete Payment
+                            </button>
+                        </div>
+
+                        <div
+                            id="paymentSuccess"
+                            style="display: none; text-align: center; padding: 2rem;"
+                        >
+                            <div style="font-size: 4rem; margin-bottom: 1rem;">
+                                ✓
+                            </div>
+                            <h3 style="color: #4CAF50;">Payment Successful!</h3>
+                            <p
+                                style="color: rgba(255, 255, 255, 0.6); margin: 1rem 0;"
+                            >
+                                Transaction completed
+                            </p>
+                            <button
+                                class="btn btn-outline"
+                                onclick="resetTerminal()"
+                            >
+                                New Payment
+                            </button>
+                        </div>
+
+                        <div
+                            id="paymentIdle"
+                            style="text-align: center; padding: 3rem; color: rgba(255, 255, 255, 0.5);"
+                        >
+                            Select a booking to process payment
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script is:inline>
+        let selectedBooking = null;
+
+        function selectBooking(id, clientName, amount) {
+            selectedBooking = { id, clientName, amount };
+            document.getElementById("paymentIdle").style.display = "none";
+            document.getElementById("paymentSuccess").style.display = "none";
+            document.getElementById("paymentForm").style.display = "block";
+            document.getElementById("terminalClient").textContent = clientName;
+            document.getElementById("terminalAmount").textContent =
+                `£${amount}`;
+        }
+
+        function processPayment() {
+            if (!selectedBooking) return;
+
+            // Simulate payment processing
+            document.getElementById("paymentForm").style.display = "none";
+            document.getElementById("paymentSuccess").style.display = "block";
+
+            // In real app, would update booking payment status here
+            setTimeout(() => {
+                // Could refresh page or update UI without refresh
+            }, 2000);
+        }
+
+        function resetTerminal() {
+            selectedBooking = null;
+            document.getElementById("paymentSuccess").style.display = "none";
+            document.getElementById("paymentIdle").style.display = "block";
+        }
+
+        // Payment method selection
+        document.querySelectorAll(".payment-method-btn").forEach((btn) => {
+            btn.addEventListener("click", function () {
+                document
+                    .querySelectorAll(".payment-method-btn")
+                    .forEach((b) => b.classList.remove("active"));
+                this.classList.add("active");
+            });
+        });
+    </script>
+</Layout>
+
+<style>
+    .payment-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .payment-item {
+        background: var(--color-surface);
+        padding: 1.5rem;
+        border-radius: var(--radius-lg);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        display: grid;
+        grid-template-columns: 1fr auto auto;
+        gap: 1.5rem;
+        align-items: center;
+    }
+
+    .payment-client {
+        font-weight: 700;
+        font-size: 1.125rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .payment-treatment {
+        color: rgba(255, 255, 255, 0.8);
+        margin-bottom: 0.5rem;
+    }
+
+    .payment-meta {
+        font-size: 0.875rem;
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    .payment-amount {
+        text-align: right;
+    }
+
+    .amount-label {
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.5);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .amount-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--color-accent);
+    }
+
+    .amount-note {
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.6);
+        margin-top: 0.25rem;
+    }
+
+    .payment-terminal {
+        background: var(--color-surface);
+        padding: 2rem;
+        border-radius: var(--radius-lg);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        position: sticky;
+        top: 2rem;
+    }
+
+    .terminal-display {
+        background: rgba(0, 0, 0, 0.3);
+        padding: 1.5rem;
+        border-radius: var(--radius-md);
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+
+    .terminal-client {
+        font-size: 0.875rem;
+        color: rgba(255, 255, 255, 0.6);
+        margin-bottom: 0.5rem;
+    }
+
+    .terminal-amount {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--color-accent);
+    }
+
+    .payment-method-selector {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .payment-method-btn {
+        background: rgba(255, 255, 255, 0.05);
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        padding: 1rem;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.875rem;
+    }
+
+    .payment-method-btn:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .payment-method-btn.active {
+        background: rgba(212, 175, 55, 0.2);
+        border-color: var(--color-accent);
+        color: var(--color-accent);
+    }
+
+    .card-simulator {
+        background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+        padding: 1.5rem;
+        border-radius: var(--radius-md);
+    }
+
+    .card-display {
+        background: linear-gradient(135deg, var(--color-accent), #c9a143);
+        padding: 1.5rem;
+        border-radius: var(--radius-md);
+        margin-bottom: 1rem;
+        color: var(--color-bg);
+    }
+
+    .card-chip {
+        width: 40px;
+        height: 30px;
+        background: #d4af37;
+        border-radius: 4px;
+        margin-bottom: 1.5rem;
+    }
+
+    .card-number {
+        font-family: "Courier New", monospace;
+        font-size: 1.125rem;
+        letter-spacing: 0.1em;
+        margin-bottom: 0.5rem;
+    }
+
+    .card-name {
+        font-size: 0.875rem;
+        opacity: 0.8;
+    }
+
+    .card-instructions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        font-size: 0.875rem;
+    }
+
+    @media (max-width: 1024px) {
+        .payment-item {
+            grid-template-columns: 1fr;
+        }
+
+        .payment-terminal {
+            position: static;
+        }
+    }
+</style>

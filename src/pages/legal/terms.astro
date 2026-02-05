@@ -1,0 +1,159 @@
+---
+import Layout from "../../layouts/Layout.astro";
+---
+
+<Layout title="Terms & Conditions">
+    <main class="legal-page">
+        <div class="container">
+            <h1>Terms & Conditions</h1>
+            <p class="last-updated">Last Updated: February 2026</p>
+
+            <div class="legal-content">
+                <section>
+                    <h2>1. Introduction</h2>
+                    <p>
+                        These terms and conditions govern your use of the
+                        website <strong>The Salon</strong> located at 123 Oxford Street,
+                        London. By accessing this website, you accept these terms
+                        and conditions in full. Do not continue to use The Salon's
+                        website if you do not accept all of the terms and conditions
+                        stated on this page.
+                    </p>
+                </section>
+
+                <section>
+                    <h2>2. Bookings & Cancellations</h2>
+                    <p>
+                        <strong>2.1 Deposits:</strong> A deposit may be required to
+                        secure your appointment. This deposit is non-refundable if
+                        cancellations are made with less than 24 hours' notice.
+                    </p>
+                    <p>
+                        <strong>2.2 Cancellations:</strong> We require at least 24
+                        hours' notice for cancellations. Failure to provide this may
+                        result in a charge of up to 50% of the service cost.
+                    </p>
+                    <p>
+                        <strong>2.3 Lateness:</strong> Please arrive on time. If you
+                        are more than 15 minutes late, we may need to reschedule your
+                        appointment or shorten your service time.
+                    </p>
+                </section>
+
+                <section>
+                    <h2>3. Skin Tests</h2>
+                    <p>
+                        For certain services (e.g., hair colouring, lash
+                        tinting), a skin patch test is mandatory at least 48
+                        hours prior to your appointment. Failure to complete a
+                        required patch test will result in the cancellation of
+                        your service for your safety.
+                    </p>
+                </section>
+
+                <section>
+                    <h2>4. Intellectual Property Rights</h2>
+                    <p>
+                        Unless otherwise stated, The Salon and/or its licensors
+                        own the intellectual property rights for all material on
+                        The Salon. All intellectual property rights are
+                        reserved. You may view and/or print pages from
+                        https://thesalon.london for your own personal use
+                        subject to restrictions set in these terms and
+                        conditions.
+                    </p>
+                </section>
+
+                <section>
+                    <h2>5. Limitation of Liability</h2>
+                    <p>
+                        To the maximum extent permitted by applicable law, we
+                        exclude all representations, warranties, and conditions
+                        relating to our website and the use of this website
+                        (including, without limitation, any warranties implied
+                        by law in respect of satisfactory quality, fitness for
+                        purpose and/or the use of reasonable care and skill).
+                    </p>
+                </section>
+
+                <section>
+                    <h2>6. Governing Law</h2>
+                    <p>
+                        These terms and conditions are governed by and construed
+                        in accordance with the laws of England and Wales. Any
+                        disputes relating to these terms and conditions will be
+                        subject to the exclusive jurisdiction of the courts of
+                        England and Wales.
+                    </p>
+                </section>
+
+                <section>
+                    <h2>7. Contact Us</h2>
+                    <p>
+                        If you have any questions about these Terms, please
+                        contact us at: <a href="mailto:hello@thesalon.london"
+                            >hello@thesalon.london</a
+                        >.
+                    </p>
+                </section>
+            </div>
+        </div>
+    </main>
+</Layout>
+
+<style>
+    .legal-page {
+        padding-top: 140px;
+        padding-bottom: 4rem;
+        min-height: 80vh;
+    }
+
+    h1 {
+        font-size: 3rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .last-updated {
+        color: rgba(255, 255, 255, 0.6);
+        margin-bottom: 3rem;
+    }
+
+    .legal-content {
+        background: var(--color-surface);
+        padding: 3rem;
+        border-radius: var(--radius-lg);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        max-width: 900px;
+    }
+
+    section {
+        margin-bottom: 2.5rem;
+    }
+
+    h2 {
+        color: var(--color-accent);
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    p {
+        line-height: 1.8;
+        color: rgba(255, 255, 255, 0.8);
+        margin-bottom: 1rem;
+    }
+
+    a {
+        color: white;
+        text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+        .legal-content {
+            padding: 1.5rem;
+        }
+
+        h1 {
+            font-size: 2rem;
+        }
+    }
+</style>

@@ -1,0 +1,293 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { STAFF_PROFILES } from "../../data/staff-data";
+import "../../styles/calendar.css";
+
+// For demo, use first staff
+const currentStaff = STAFF_PROFILES[0];
+
+// Get upcoming holidays
+const upcomingHolidays = currentStaff.holidayDates
+    .map((date) => new Date(date))
+    .filter((date) => date >= new Date())
+    .sort((a, b) => a.getTime() - b.getTime());
+---
+
+<Layout title="Holiday Management">
+    <main class="page-content">
+        <section class="section">
+            <div class="container">
+                <div style="margin-bottom: 2rem;">
+                    <a
+                        href="/staff/dashboard"
+                        style="color: rgba(255, 255, 255, 0.6); text-decoration: none;"
+                    >
+                        ← Back to Dashboard
+                    </a>
+                </div>
+
+                <h1 style="margin-bottom: 1rem;">Holiday & Time Off</h1>
+                <p
+                    style="color: rgba(255, 255, 255, 0.7); margin-bottom: 3rem;"
+                >
+                    Manage your holiday dates and time off. Blocked dates will
+                    appear in your calendar and prevent new bookings.
+                </p>
+
+                <div
+                    style="display: grid; grid-template-columns: 1fr 400px; gap: 2rem;"
+                >
+                    <!-- Holiday Calendar -->
+                    <div>
+                        <div
+                            style="background: var(--color-surface); padding: 2rem; border-radius: var(--radius-lg); border: 1px solid rgba(255, 255, 255, 0.05);"
+                        >
+                            <h2 style="margin-bottom: 1.5rem;">
+                                Request Time Off
+                            </h2>
+
+                            <form class="holiday-form">
+                                <div class="form-group">
+                                    <label>Start Date</label>
+                                    <input
+                                        type="date"
+                                        required
+                                        style="width: 100%; padding: 0.75rem; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius-md); color: white;"
+                                    />
+                                </div>
+
+                                <div class="form-group">
+                                    <label>End Date</label>
+                                    <input
+                                        type="date"
+                                        required
+                                        style="width: 100%; padding: 0.75rem; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius-md); color: white;"
+                                    />
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Reason (optional)</label>
+                                    <select
+                                        style="width: 100%; padding: 0.75rem; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius-md); color: white;"
+                                    >
+                                        <option value="holiday"
+                                            >Annual Leave</option
+                                        >
+                                        <option value="sick">Sick Leave</option>
+                                        <option value="training"
+                                            >Training/Course</option
+                                        >
+                                        <option value="personal"
+                                            >Personal Day</option
+                                        >
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Notes (optional)</label>
+                                    <textarea
+                                        rows="3"
+                                        placeholder="Any additional details..."
+                                        style="width: 100%; padding: 0.75rem; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius-md); color: white; font-family: inherit;"
+                                    ></textarea>
+                                </div>
+
+                                <button
+                                    type="submit"
+                                    class="btn btn-primary"
+                                    style="width: 100%;"
+                                >
+                                    Submit Request
+                                </button>
+                            </form>
+
+                            <div
+                                class="info-banner"
+                                style="margin-top: 1.5rem; padding: 1rem; background: rgba(255, 152, 0, 0.1); border-left: 3px solid #FF9800; border-radius: var(--radius-sm); font-size: 0.875rem;"
+                            >
+                                <strong>Note:</strong> Holiday requests will be automatically
+                                blocked in your calendar. For longer absences, please
+                                notify management.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Upcoming Holidays -->
+                    <div>
+                        <div
+                            style="background: var(--color-surface); padding: 1.5rem; border-radius: var(--radius-lg); border: 1px solid rgba(255, 255, 255, 0.05); position: sticky; top: 2rem;"
+                        >
+                            <h3 style="margin-bottom: 1.5rem;">
+                                Upcoming Time Off
+                            </h3>
+
+                            {
+                                upcomingHolidays.length > 0 ? (
+                                    <div class="holiday-list">
+                                        {upcomingHolidays.map((date, idx) => (
+                                            <div class="holiday-item">
+                                                <div class="holiday-date">
+                                                    <div class="date-day">
+                                                        {date.getDate()}
+                                                    </div>
+                                                    <div class="date-month">
+                                                        {date.toLocaleDateString(
+                                                            "en-GB",
+                                                            { month: "short" },
+                                                        )}
+                                                    </div>
+                                                </div>
+                                                <div class="holiday-info">
+                                                    <div class="holiday-type">
+                                                        Holiday
+                                                    </div>
+                                                    <div class="holiday-name">
+                                                        {date.toLocaleDateString(
+                                                            "en-GB",
+                                                            { weekday: "long" },
+                                                        )}
+                                                    </div>
+                                                </div>
+                                                <button
+                                                    class="btn-icon"
+                                                    title="Remove"
+                                                    style="background: none; border: none; color: rgba(255, 255, 255, 0.5); cursor: pointer; font-size: 1.25rem;"
+                                                >
+                                                    ×
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <p style="text-align: center; color: rgba(255, 255, 255, 0.5); padding: 2rem;">
+                                        No upcoming time off scheduled
+                                    </p>
+                                )
+                            }
+
+                            <div
+                                style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.05);"
+                            >
+                                <div
+                                    style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;"
+                                >
+                                    <span
+                                        style="color: rgba(255, 255, 255, 0.7); font-size: 0.875rem;"
+                                        >Days Used</span
+                                    >
+                                    <span style="font-weight: 700;"
+                                        >{currentStaff.holidayDates.length} days</span
+                                    >
+                                </div>
+                                <div
+                                    style="display: flex; justify-content: space-between;"
+                                >
+                                    <span
+                                        style="color: rgba(255, 255, 255, 0.7); font-size: 0.875rem;"
+                                        >Annual Allowance</span
+                                    >
+                                    <span style="font-weight: 700;"
+                                        >28 days</span
+                                    >
+                                </div>
+                                <div style="margin-top: 1rem;">
+                                    <div
+                                        style="background: rgba(255, 255, 255, 0.1); height: 8px; border-radius: var(--radius-full); overflow: hidden;"
+                                    >
+                                        <div
+                                            style={`width: ${(currentStaff.holidayDates.length / 28) * 100}%; height: 100%; background: var(--color-accent);`}
+                                        >
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script is:inline>
+        document
+            .querySelector(".holiday-form")
+            ?.addEventListener("submit", function (e) {
+                e.preventDefault();
+                alert(
+                    "Holiday request submitted! In a real system, this would update the database and notify management.",
+                );
+                this.reset();
+            });
+    </script>
+</Layout>
+
+<style>
+    .holiday-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .holiday-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: var(--radius-md);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .holiday-date {
+        background: var(--color-accent);
+        color: var(--color-bg);
+        width: 60px;
+        height: 60px;
+        border-radius: var(--radius-md);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .date-day {
+        font-size: 1.5rem;
+        font-weight: 700;
+        line-height: 1;
+    }
+
+    .date-month {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .holiday-info {
+        flex: 1;
+    }
+
+    .holiday-type {
+        font-size: 0.75rem;
+        color: var(--color-accent);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.25rem;
+    }
+
+    .holiday-name {
+        font-weight: 600;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        font-size: 0.875rem;
+        color: rgba(255, 255, 255, 0.8);
+    }
+</style>

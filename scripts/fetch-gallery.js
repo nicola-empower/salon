@@ -22,9 +22,9 @@ if (!UNSPLASH_ACCESS_KEY) {
 }
 
 const CATEGORIES = [
-    { name: 'hair', query: 'luxury hair salon model', count: 3 },
-    { name: 'nails', query: 'artistic manicure close up', count: 3 },
-    { name: 'spa', query: 'luxury spa facial treatment', count: 3 }
+    { name: 'hair', query: 'hair salon back view hairstyle balayage', count: 6 },
+    { name: 'nails', query: 'manicure hands close up nail art', count: 6 },
+    { name: 'spa', query: 'woman facial spa treatment skincare', count: 6 }
 ];
 
 const OUTPUT_DIR = path.join(rootDir, 'src', 'assets', 'gallery');

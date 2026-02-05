@@ -1,0 +1,230 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import WeeklyCalendar from "../../components/Calendar/WeeklyCalendar";
+import {
+    STAFF_PROFILES,
+    MOCK_BOOKINGS,
+    getStaffBookings,
+} from "../../data/staff-data";
+import "../../styles/calendar.css";
+
+// For demo, use first staff member
+const currentStaff = STAFF_PROFILES[0];
+const staffBookings = getStaffBookings(currentStaff.id);
+
+// Get current week start (Monday)
+const now = new Date();
+const dayOfWeek = now.getDay();
+const diff = now.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
+const weekStart = new Date(now.setDate(diff));
+weekStart.setHours(0, 0, 0, 0);
+
+// Calculate stats
+const todayBookings = staffBookings.filter((b) => {
+    const today = new Date().toISOString().split("T")[0];
+    return b.date === today;
+});
+
+const thisWeekBookings = staffBookings.filter((b) => {
+    const bookingDate = new Date(b.date);
+    const weekEnd = new Date(weekStart);
+    weekEnd.setDate(weekEnd.getDate() + 7);
+    return bookingDate >= weekStart && bookingDate < weekEnd;
+});
+
+const weeklyRevenue = thisWeekBookings.reduce((sum, b) => sum + b.price, 0);
+---
+
+<Layout title={`Staff Dashboard - ${currentStaff.name}`}>
+    <main class="page-content">
+        <section class="section">
+            <div class="container">
+                <!-- Header -->
+                <div class="page-header" style="margin-bottom: 3rem;">
+                    <div
+                        style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1rem;"
+                    >
+                        <div
+                            class="client-avatar"
+                            style="width: 60px; height: 60px; font-size: 1.5rem;"
+                        >
+                            {
+                                currentStaff.name
+                                    .split(" ")
+                                    .map((n) => n[0])
+                                    .join("")
+                            }
+                        </div>
+                        <div>
+                            <h1 style="margin: 0; font-size: 2rem;">
+                                Welcome back, {currentStaff.name}
+                            </h1>
+                            <p
+                                style="margin: 0.25rem 0 0; color: rgba(255, 255, 255, 0.6);"
+                            >
+                                {currentStaff.role} • {
+                                    currentStaff.yearsExperience
+                                } years experience
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats Overview -->
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <div class="stat-label">Today's Bookings</div>
+                        <div class="stat-value">{todayBookings.length}</div>
+                        <div class="stat-subtitle">
+                            {
+                                todayBookings.filter(
+                                    (b) => b.status === "confirmed",
+                                ).length
+                            } confirmed
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-label">This Week</div>
+                        <div class="stat-value">{thisWeekBookings.length}</div>
+                        <div class="stat-subtitle">appointments scheduled</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-label">Weekly Revenue</div>
+                        <div class="stat-value">£{weeklyRevenue}</div>
+                        <div class="stat-subtitle">
+                            from {
+                                thisWeekBookings.filter(
+                                    (b) =>
+                                        b.status === "completed" ||
+                                        b.status === "confirmed",
+                                ).length
+                            } services
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-label">Next Holiday</div>
+                        <div class="stat-value">
+                            {
+                                currentStaff.holidayDates.length > 0
+                                    ? new Date(
+                                          currentStaff.holidayDates[0],
+                                      ).toLocaleDateString("en-GB", {
+                                          day: "numeric",
+                                          month: "short",
+                                      })
+                                    : "None"
+                            }
+                        </div>
+                        <div class="stat-subtitle">
+                            {currentStaff.holidayDates.length} day(s) off planned
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Calendar Section -->
+                <div style="margin-top: 3rem;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;"
+                    >
+                        <h2>Your Weekly Schedule</h2>
+                        <div style="display: flex; gap: 1rem;">
+                            <button class="btn btn-outline"
+                                >← Previous Week</button
+                            >
+                            <button class="btn btn-outline">Next Week →</button>
+                        </div>
+                    </div>
+
+                    <WeeklyCalendar
+                        client:load
+                        staffId={currentStaff.id}
+                        weekStart={weekStart}
+                        bookings={staffBookings}
+                    />
+                </div>
+
+                <!-- Today's Appointments -->
+                {
+                    todayBookings.length > 0 && (
+                        <div style="margin-top: 3rem;">
+                            <h2 style="margin-bottom: 1.5rem;">
+                                Today's Schedule
+                            </h2>
+                            <div class="client-list">
+                                {todayBookings
+                                    .sort((a, b) =>
+                                        a.time.localeCompare(b.time),
+                                    )
+                                    .map((booking) => (
+                                        <div class="client-item">
+                                            <div class="client-avatar">
+                                                {booking.clientName
+                                                    .split(" ")
+                                                    .map((n) => n[0])
+                                                    .join("")}
+                                            </div>
+                                            <div class="client-info">
+                                                <div class="client-name">
+                                                    {booking.clientName}
+                                                </div>
+                                                <div class="client-treatment">
+                                                    {booking.treatmentName}
+                                                </div>
+                                            </div>
+                                            <div class="client-time">
+                                                {booking.time}
+                                            </div>
+                                            <div
+                                                class={`badge ${booking.status === "confirmed" ? "badge-success" : "badge-warning"}`}
+                                            >
+                                                {booking.status}
+                                            </div>
+                                        </div>
+                                    ))}
+                            </div>
+                        </div>
+                    )
+                }
+
+                <!-- Quick Actions -->
+                <div
+                    style="margin-top: 3rem; display: flex; gap: 1rem; flex-wrap: wrap;"
+                >
+                    <a href="/staff/clients" class="btn btn-outline">
+                        View All Clients
+                    </a>
+                    <a href="/staff/profile" class="btn btn-outline">
+                        Edit Profile
+                    </a>
+                    <a href="/staff/holidays" class="btn btn-outline">
+                        Manage Holidays
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+</Layout>
+
+<style>
+    .badge {
+        padding: 0.25rem 0.75rem;
+        border-radius: var(--radius-full);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-weight: 600;
+    }
+
+    .badge-success {
+        background: rgba(76, 175, 80, 0.2);
+        color: #4caf50;
+    }
+
+    .badge-warning {
+        background: rgba(255, 152, 0, 0.2);
+        color: #ff9800;
+    }
+</style>

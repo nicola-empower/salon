@@ -147,20 +147,29 @@ const SkinConsultation = () => {
 
                     {error && (
                         <div className="error-banner">
-                            <span>⚠️ {error}</span>
+                            <div className="error-banner">
+                                <span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'inline', marginRight: '8px', verticalAlign: 'text-bottom' }}><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" /><path d="M12 9v4" /><path d="M12 17h.01" /></svg>
+                                    {error}
+                                </span>
+                            </div>
                         </div>
                     )}
 
                     {!imagePreview && !cameraActive && (
                         <div className="upload-options">
                             <button className="option-card" onClick={() => fileInputRef.current?.click()}>
-                                <div className="icon">📁</div>
+                                <div className="icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242" /><path d="M12 12v9" /><path d="m16 16-4-4-4 4" /></svg>
+                                </div>
                                 <h3>Upload Photo</h3>
                                 <p>Choose from your device</p>
                             </button>
 
                             <button className="option-card" onClick={startCamera}>
-                                <div className="icon">📸</div>
+                                <div className="icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" /><circle cx="12" cy="13" r="3" /></svg>
+                                </div>
                                 <h3>Take Selfie</h3>
                                 <p>Use your camera</p>
                             </button>
@@ -223,7 +232,9 @@ const SkinConsultation = () => {
                             <div className="pulse-ring"></div>
                             <div className="pulse-ring delay-1"></div>
                             <div className="pulse-ring delay-2"></div>
-                            <span className="loader-icon">🔬</span>
+                            <span className="loader-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 7 6.82 21.18a2.83 2.83 0 0 1-3.99-.01v0a2.83 2.83 0 0 1 0-4L17 3" /><path d="m16 2 6 6" /><path d="M12 16H4" /><path d="M12 20H8" /></svg>
+                            </span>
                         </div>
                         <h3>Analysing Your Skin...</h3>
                         <p>Our AI is examining your skin type, concerns, and recommending treatments</p>

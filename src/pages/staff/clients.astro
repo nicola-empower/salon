@@ -1,0 +1,115 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { CLIENT_RECORDS } from "../../data/staff-data";
+import "../../styles/calendar.css";
+---
+
+<Layout title="Client Records">
+    <main class="page-content">
+        <section class="section">
+            <div class="container">
+                <div style="margin-bottom: 2rem;">
+                    <a
+                        href="/staff/dashboard"
+                        style="color: rgba(255, 255, 255, 0.6); text-decoration: none;"
+                    >
+                        ← Back to Dashboard
+                    </a>
+                </div>
+
+                <h1 style="margin-bottom: 2rem;">My Clients</h1>
+
+                <!-- Search & Filter -->
+                <div style="margin-bottom: 2rem;">
+                    <input
+                        type="text"
+                        placeholder="Search clients..."
+                        class="search-input"
+                        style="width: 100%; max-width: 500px; padding: 1rem; background: var(--color-surface); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius-md); color: white;"
+                    />
+                </div>
+
+                <!-- Client Grid -->
+                <div
+                    style="display: grid; grid-template-columns: repeat(auto-fill,minmax(300px, 1fr)); gap: 1.5rem;"
+                >
+                    {
+                        CLIENT_RECORDS.map((client) => (
+                            <a
+                                href={`/staff/clients/${client.id}`}
+                                class="client-card"
+                            >
+                                <div
+                                    class="client-avatar"
+                                    style="width: 60px; height: 60px; font-size: 1.5rem; margin-bottom: 1rem;"
+                                >
+                                    {client.name
+                                        .split(" ")
+                                        .map((n) => n[0])
+                                        .join("")}
+                                </div>
+
+                                <h3 style="margin-bottom: 0.5rem;">
+                                    {client.name}
+                                </h3>
+
+                                <div style="font-size: 0.875rem; color: rgba(255, 255, 255, 0.6); margin-bottom: 1rem;">
+                                    <div>{client.email}</div>
+                                    <div>{client.phone}</div>
+                                </div>
+
+                                <div style="display: flex; gap: 1rem; font-size: 0.75rem; color: rgba(255, 255, 255, 0.5); padding-top: 1rem; border-top: 1px solid rgba(255, 255, 255, 0.05);">
+                                    <div>
+                                        <strong style="color: var(--color-accent);">
+                                            {client.treatmentHistory.length}
+                                        </strong>{" "}
+                                        treatments
+                                    </div>
+                                    <div>
+                                        Last visit:{" "}
+                                        {new Date(
+                                            client.lastVisit,
+                                        ).toLocaleDateString("en-GB", {
+                                            month: "short",
+                                            day: "numeric",
+                                        })}
+                                    </div>
+                                </div>
+                            </a>
+                        ))
+                    }
+                </div>
+
+                {
+                    CLIENT_RECORDS.length === 0 && (
+                        <div style="text-align: center; padding: 4rem; color: rgba(255, 255, 255, 0.6);">
+                            <p>
+                                No clients yet. They'll appear here after their
+                                first booking with you.
+                            </p>
+                        </div>
+                    )
+                }
+            </div>
+        </section>
+    </main>
+</Layout>
+
+<style>
+    .client-card {
+        background: var(--color-surface);
+        padding: 1.5rem;
+        border-radius: var(--radius-lg);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        text-decoration: none;
+        color: inherit;
+        transition: all 0.3s ease;
+        display: block;
+    }
+
+    .client-card:hover {
+        border-color: var(--color-accent);
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+</style>

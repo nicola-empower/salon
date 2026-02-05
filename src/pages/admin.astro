@@ -5,9 +5,436 @@ import AdminDashboard from "../components/AdminDashboard";
 
 <Layout title="Staff Portal">
     <main class="container page-content">
-        <div class="text-center mb-lg">
-            <h1>Salon Management</h1>
-            <p class="subtitle">Welcome back, Admin</p>
+        <div class="container">
+            <h1 style="margin-bottom: 3rem;">Staff & Management Portal</h1>
+
+            <!-- Portal Access Cards -->
+            <div
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem; margin-bottom: 3rem;"
+            >
+                <!-- Staff Portal -->
+                <a href="/staff/dashboard" class="portal-card">
+                    <div
+                        class="portal-icon"
+                        style="font-size: 3rem; margin-bottom: 1rem;"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="48"
+                            height="48"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            ><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"
+                            ></path><circle cx="12" cy="7" r="4"></circle></svg
+                        >
+                    </div>
+                    <h2>Staff Portal</h2>
+                    <p
+                        style="color: rgba(255, 255, 255, 0.7); margin-bottom: 1.5rem;"
+                    >
+                        Access your personal dashboard, manage clients, view
+                        your schedule, and book holidays
+                    </p>
+                    <ul
+                        style="list-style: none; padding: 0; text-align: left; font-size: 0.875rem; color: rgba(255, 255, 255, 0.6);"
+                    >
+                        <li>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="var(--color-accent)"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                style="vertical-align: text-bottom; margin-right: 4px;"
+                                ><polyline points="20 6 9 17 4 12"
+                                ></polyline></svg
+                            > Weekly calendar & bookings
+                        </li>
+                        <li>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="var(--color-accent)"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                style="vertical-align: text-bottom; margin-right: 4px;"
+                                ><polyline points="20 6 9 17 4 12"
+                                ></polyline></svg
+                            > Client records & history
+                        </li>
+                        <li>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="var(--color-accent)"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                style="vertical-align: text-bottom; margin-right: 4px;"
+                                ><polyline points="20 6 9 17 4 12"
+                                ></polyline></svg
+                            > Holiday management
+                        </li>
+                        <li>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="var(--color-accent)"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                style="vertical-align: text-bottom; margin-right: 4px;"
+                                ><polyline points="20 6 9 17 4 12"
+                                ></polyline></svg
+                            > Earnings tracker
+                        </li>
+                    </ul>
+                    <div
+                        class="btn btn-primary"
+                        style="margin-top: 2rem; display: inline-block;"
+                    >
+                        Open Staff Dashboard →
+                    </div>
+                </a>
+
+                <!-- Receptionist Portal -->
+                <a href="/receptionist/dashboard" class="portal-card">
+                    <div
+                        class="portal-icon"
+                        style="font-size: 3rem; margin-bottom: 1rem;"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="48"
+                            height="48"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            ><rect
+                                x="4"
+                                y="2"
+                                width="16"
+                                height="20"
+                                rx="2"
+                                ry="2"></rect><path d="M9 22v-4h6v4"
+                            ></path><path d="M8 6h.01"></path><path
+                                d="M16 6h.01"></path><path d="M8 10h.01"
+                            ></path><path d="M16 10h.01"></path><path
+                                d="M8 14h.01"></path><path d="M16 14h.01"
+                            ></path></svg
+                        >
+                    </div>
+                    <h2>Receptionist Portal</h2>
+                    <p
+                        style="color: rgba(255, 255, 255, 0.7); margin-bottom: 1.5rem;"
+                    >
+                        Manage bookings for all staff, process payments, and
+                        handle client check-ins
+                    </p>
+                    <ul
+                        style="list-style: none; padding: 0; text-align: left; font-size: 0.875rem; color: rgba(255, 255, 255, 0.6);"
+                    >
+                        <li>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="var(--color-accent)"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                style="vertical-align: text-bottom; margin-right: 4px;"
+                                ><polyline points="20 6 9 17 4 12"
+                                ></polyline></svg
+                            > Multi-staff booking
+                        </li>
+                        <li>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="var(--color-accent)"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                style="vertical-align: text-bottom; margin-right: 4px;"
+                                ><polyline points="20 6 9 17 4 12"
+                                ></polyline></svg
+                            > Payment processing
+                        </li>
+                        <li>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="var(--color-accent)"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                style="vertical-align: text-bottom; margin-right: 4px;"
+                                ><polyline points="20 6 9 17 4 12"
+                                ></polyline></svg
+                            > All calendars view
+                        </li>
+                        <li>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="var(--color-accent)"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                style="vertical-align: text-bottom; margin-right: 4px;"
+                                ><polyline points="20 6 9 17 4 12"
+                                ></polyline></svg
+                            > Walk-in management
+                        </li>
+                    </ul>
+                    <div
+                        class="btn btn-primary"
+                        style="margin-top: 2rem; display: inline-block;"
+                    >
+                        Open Receptionist Dashboard →
+                    </div>
+                </a>
+
+                <!-- Admin Overview -->
+                <div
+                    class="portal-card"
+                    style="background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(212, 175, 55, 0.05)); border-color: var(--color-accent);"
+                >
+                    <div
+                        class="portal-icon"
+                        style="font-size: 3rem; margin-bottom: 1rem;"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="48"
+                            height="48"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            ><line x1="18" y1="20" x2="18" y2="10"></line><line
+                                x1="12"
+                                y1="20"
+                                x2="12"
+                                y2="4"></line><line
+                                x1="6"
+                                y1="20"
+                                x2="6"
+                                y2="14"></line></svg
+                        >
+                    </div>
+                    <h2>Management Overview</h2>
+                    <p
+                        style="color: rgba(255, 255, 255, 0.7); margin-bottom: 1.5rem;"
+                    >
+                        View analytics, manage staff, and access system reports
+                    </p>
+                    <div class="admin-stats" style="margin-top: 1.5rem;">
+                        <div style="margin-bottom: 0.75rem;">
+                            <span
+                                style="color: rgba(255, 255, 255, 0.6); font-size: 0.875rem;"
+                                >Total Bookings Today:</span
+                            >
+                            <strong
+                                style="float: right; color: var(--color-accent);"
+                                >3</strong
+                            >
+                        </div>
+                        <div style="margin-bottom: 0.75rem;">
+                            <span
+                                style="color: rgba(255, 255, 255, 0.6); font-size: 0.875rem;"
+                                >Active Staff:</span
+                            >
+                            <strong
+                                style="float: right; color: var(--color-accent);"
+                                >3</strong
+                            >
+                        </div>
+                        <div>
+                            <span
+                                style="color: rgba(255, 255, 255, 0.6); font-size: 0.875rem;"
+                                >Revenue (Week):</span
+                            >
+                            <strong
+                                style="float: right; color: var(--color-accent);"
+                                >£337</strong
+                            >
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div
+                style="background: var(--color-surface); padding: 2rem; border-radius: var(--radius-lg); border: 1px solid rgba(255, 255, 255, 0.05);"
+            >
+                <h3 style="margin-bottom: 1.5rem;">Quick Access</h3>
+                <div
+                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;"
+                >
+                    <a href="/staff/clients" class="quick-link">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            ><path
+                                d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"
+                            ></path><rect
+                                x="8"
+                                y="2"
+                                width="8"
+                                height="4"
+                                rx="1"
+                                ry="1"></rect></svg
+                        >
+                        Client Records
+                    </a>
+                    <a href="/staff/holidays" class="quick-link">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            ><circle cx="12" cy="12" r="5"></circle><path
+                                d="M12 1v2"></path><path d="M12 21v2"
+                            ></path><path d="M4.22 4.22l1.42 1.42"></path><path
+                                d="M18.36 18.36l1.42 1.42"></path><path
+                                d="M1 12h2"></path><path d="M21 12h2"
+                            ></path><path d="M4.22 19.78l1.42-1.42"></path><path
+                                d="M18.36 5.64l1.42-1.42"></path></svg
+                        >
+                        Holiday Management
+                    </a>
+                    <a href="/receptionist/payments" class="quick-link">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            ><rect
+                                x="1"
+                                y="4"
+                                width="22"
+                                height="16"
+                                rx="2"
+                                ry="2"></rect><line
+                                x1="1"
+                                y1="10"
+                                x2="23"
+                                y2="10"></line></svg
+                        >
+                        Payment Terminal
+                    </a>
+                    <a href="/treatments" class="quick-link">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            ><path
+                                d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+                            ></path></svg
+                        >
+                        Treatment Menu
+                    </a>
+                    <a href="/gallery" class="quick-link">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            ><rect
+                                x="3"
+                                y="3"
+                                width="18"
+                                height="18"
+                                rx="2"
+                                ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"
+                            ></circle><polyline points="21 15 16 10 5 21"
+                            ></polyline></svg
+                        >
+                        Portfolio
+                    </a>
+                    <a href="/results" class="quick-link">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            ><path
+                                d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+                            ></path></svg
+                        >
+                        Before/After Gallery
+                    </a>
+                </div>
+            </div>
         </div>
 
         <AdminDashboard client:only="react" />
@@ -21,5 +448,48 @@ import AdminDashboard from "../components/AdminDashboard";
     }
     .mb-lg {
         margin-bottom: 3rem;
+    }
+
+    .portal-card {
+        background: var(--color-surface);
+        padding: 2rem;
+        border-radius: var(--radius-lg);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        text-decoration: none;
+        color: inherit;
+        display: block;
+        transition: all 0.3s ease;
+        text-align: center;
+    }
+
+    .portal-card:hover {
+        border-color: var(--color-accent);
+        transform: translateY(-8px);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+    }
+
+    .portal-card h2 {
+        margin-bottom: 1rem;
+        color: white;
+    }
+
+    .quick-link {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 1rem;
+        border-radius: var(--radius-md);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.3s ease;
+        font-size: 0.875rem;
+    }
+
+    .quick-link:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: var(--color-accent);
+        transform: translateX(4px);
     }
 </style>

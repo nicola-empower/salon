@@ -35,7 +35,7 @@ const categories = [
 <Layout title="Home">
 	<main>
 		<!-- Hero Section -->
-		<section class="hero">
+		<section class="hero" data-gsap-hero>
 			<div class="hero-bg">
 				<img src={heroImage.src} alt="Luxury Salon Interior" />
 				<div class="overlay"></div>
@@ -61,14 +61,14 @@ const categories = [
 		</section>
 
 		<!-- Category Showcase -->
-		<section class="section bg-dark">
+		<section class="section bg-dark" data-gsap-fade-up>
 			<div class="container">
 				<h2 class="section-title text-center">Our Services</h2>
 				<p class="text-center subtitle-text">
 					Explore our comprehensive range of treatments
 				</p>
 
-				<div class="category-grid">
+				<div class="category-grid" data-gsap-stagger>
 					{
 						categories.map((cat) => (
 							<a href={cat.link} class="category-card">
@@ -93,7 +93,7 @@ const categories = [
 		<section class="section ai-spotlight">
 			<div class="container">
 				<div class="spotlight-content">
-					<div class="spotlight-text">
+					<div class="spotlight-text" data-gsap-slide-left>
 						<span class="badge">✨ New Feature</span>
 						<h2>AI-Powered Skin Consultation</h2>
 						<p>
@@ -113,7 +113,7 @@ const categories = [
 							>Try AI Consultation Free</a
 						>
 					</div>
-					<div class="spotlight-visual">
+					<div class="spotlight-visual" data-gsap-slide-right>
 						<div class="ai-demo-card">
 							<div class="demo-header">AI Analysis</div>
 							<div class="demo-content">
@@ -130,11 +130,11 @@ const categories = [
 		</section>
 
 		<!-- Featured Signature Treatments -->
-		<section class="section">
+		<section class="section" data-gsap-fade-up>
 			<div class="container">
 				<h2 class="section-title text-center">Signature Treatments</h2>
 
-				<div class="grid-3">
+				<div class="grid-3" data-gsap-stagger>
 					{
 						featuredTreatments.map((item) => (
 							<div class="card">

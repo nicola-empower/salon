@@ -1,0 +1,455 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { STAFF_PROFILES, MOCK_BOOKINGS } from "../../data/staff-data";
+import "../../styles/calendar.css";
+
+// Get all staff for receptionist view
+const allStaff = STAFF_PROFILES;
+const today = new Date().toISOString().split("T")[0];
+const todayBookings = MOCK_BOOKINGS.filter((b) => b.date === today);
+
+// Group bookings by staff
+const bookingsByStaff = allStaff.map((staff) => ({
+    staff,
+    bookings: todayBookings.filter((b) => b.staffId === staff.id),
+}));
+---
+
+<Layout title="Receptionist Dashboard">
+    <main class="page-content">
+        <section class="section">
+            <div class="container">
+                <h1 style="margin-bottom: 2rem;">Receptionist Dashboard</h1>
+
+                <!-- Quick Actions -->
+                <div
+                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;"
+                >
+                    <button
+                        class="action-card"
+                        onclick="document.getElementById('quickBookModal').style.display='flex'"
+                    >
+                        <span style="font-size: 2rem; margin-bottom: 0.5rem;"
+                            >📅</span
+                        >
+                        <h3>New Booking</h3>
+                        <p>Book for any staff member</p>
+                    </button>
+
+                    <a href="/receptionist/check-in" class="action-card">
+                        <span style="font-size: 2rem; margin-bottom: 0.5rem;"
+                            >✓</span
+                        >
+                        <h3>Check-In Client</h3>
+                        <p>Mark arrival for today's appointments</p>
+                    </a>
+
+                    <a href="/receptionist/payments" class="action-card">
+                        <span style="font-size: 2rem; margin-bottom: 0.5rem;"
+                            >💳</span
+                        >
+                        <h3>Process Payment</h3>
+                        <p>Take payment for services</p>
+                    </a>
+
+                    <a href="/receptionist/calendar" class="action-card">
+                        <span style="font-size: 2rem; margin-bottom: 0.5rem;"
+                            >📊</span
+                        >
+                        <h3>View All Calendars</h3>
+                        <p>See all staff schedules</p>
+                    </a>
+                </div>
+
+                <!-- Today's Overview -->
+                <h2 style="margin-bottom: 1.5rem;">Today's Appointments</h2>
+
+                <div class="staff-bookings-grid">
+                    {
+                        bookingsByStaff.map(({ staff, bookings }) => (
+                            <div class="staff-section">
+                                <div class="staff-header">
+                                    <div
+                                        class="client-avatar"
+                                        style="width: 40px; height: 40px; font-size: 1rem;"
+                                    >
+                                        {staff.name
+                                            .split(" ")
+                                            .map((n) => n[0])
+                                            .join("")}
+                                    </div>
+                                    <div>
+                                        <h3>{staff.name}</h3>
+                                        <p style="font-size: 0.875rem; color: rgba(255, 255, 255, 0.6);">
+                                            {staff.role}
+                                        </p>
+                                    </div>
+                                    <div class="booking-count">
+                                        {bookings.length}{" "}
+                                        {bookings.length === 1
+                                            ? "booking"
+                                            : "bookings"}
+                                    </div>
+                                </div>
+
+                                <div class="bookings-list">
+                                    {bookings.length > 0 ? (
+                                        bookings
+                                            .sort((a, b) =>
+                                                a.time.localeCompare(b.time),
+                                            )
+                                            .map((booking) => (
+                                                <div class="booking-item">
+                                                    <div class="booking-time-badge">
+                                                        {booking.time}
+                                                    </div>
+                                                    <div class="booking-details">
+                                                        <div class="booking-client-name">
+                                                            {booking.clientName}
+                                                        </div>
+                                                        <div class="booking-treatment-name">
+                                                            {
+                                                                booking.treatmentName
+                                                            }
+                                                        </div>
+                                                        <div class="booking-meta">
+                                                            {booking.duration}{" "}
+                                                            mins • £
+                                                            {booking.price}
+                                                        </div>
+                                                    </div>
+                                                    <div class="booking-actions">
+                                                        <span
+                                                            class={`status-badge status-${booking.status}`}
+                                                        >
+                                                            {booking.status}
+                                                        </span>
+                                                        {booking.paymentStatus ===
+                                                            "unpaid" && (
+                                                            <button
+                                                                class="btn-small btn-primary"
+                                                                style="margin-left: 0.5rem;"
+                                                            >
+                                                                Pay Now
+                                                            </button>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            ))
+                                    ) : (
+                                        <p style="text-align: center; color: rgba(255, 255, 255, 0.5); padding: 2rem;">
+                                            No bookings today
+                                        </p>
+                                    )}
+                                </div>
+                            </div>
+                        ))
+                    }
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Quick Booking Modal -->
+    <div id="quickBookModal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <h2>New Booking</h2>
+                <button
+                    onclick="document.getElementById('quickBookModal').style.display='none'"
+                    style="background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer;"
+                >
+                    ×
+                </button>
+            </div>
+
+            <form class="booking-form" style="padding: 2rem;">
+                <div class="form-group">
+                    <label>Staff Member</label>
+                    <select
+                        required
+                        style="width: 100%; padding: 0.75rem; background: var(--color-surface); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius-md); color: white;"
+                    >
+                        <option value="">Select staff...</option>
+                        {
+                            allStaff.map((staff) => (
+                                <option value={staff.id}>
+                                    {staff.name} - {staff.role}
+                                </option>
+                            ))
+                        }
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Client Name</label>
+                    <input
+                        type="text"
+                        required
+                        placeholder="Enter client name"
+                        style="width: 100%; padding: 0.75rem; background: var(--color-surface); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius-md); color: white;"
+                    />
+                </div>
+
+                <div
+                    class="form-row"
+                    style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;"
+                >
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input
+                            type="date"
+                            required
+                            value={today}
+                            style="width: 100%; padding: 0.75rem; background: var(--color-surface); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius-md); color: white;"
+                        />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Time</label>
+                        <input
+                            type="time"
+                            required
+                            style="width: 100%; padding: 0.75rem; background: var(--color-surface); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius-md); color: white;"
+                        />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Treatment</label>
+                    <select
+                        required
+                        style="width: 100%; padding: 0.75rem; background: var(--color-surface); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius-md); color: white;"
+                    >
+                        <option value="">Select treatment...</option>
+                        <option value="cut">Haircut - £45</option>
+                        <option value="highlights"
+                            >Full Head Highlights - £185</option
+                        >
+                        <option value="facial">HydraFacial - £120</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Notes (optional)</label>
+                    <textarea
+                        rows="3"
+                        placeholder="Any special requirements..."
+                        style="width: 100%; padding: 0.75rem; background: var(--color-surface); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius-md); color: white; font-family: inherit;"
+                    ></textarea>
+                </div>
+
+                <div
+                    style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem;"
+                >
+                    <button
+                        type="button"
+                        class="btn btn-outline"
+                        onclick="document.getElementById('quickBookModal').style.display='none'"
+                    >
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        Create Booking
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</Layout>
+
+<style>
+    .action-card {
+        background: var(--color-surface);
+        padding: 2rem;
+        border-radius: var(--radius-lg);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        text-align: center;
+        text-decoration: none;
+        color: inherit;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .action-card:hover {
+        border-color: var(--color-accent);
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    .action-card h3 {
+        margin: 0 0 0.5rem;
+    }
+
+    .action-card p {
+        margin: 0;
+        font-size: 0.875rem;
+        color: rgba(255, 255, 255, 0.6);
+    }
+
+    .staff-bookings-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .staff-section {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        overflow: hidden;
+    }
+
+    .staff-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1.5rem;
+        background: rgba(255, 255, 255, 0.02);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .staff-header h3 {
+        margin: 0;
+        flex: 1;
+    }
+
+    .booking-count {
+        background: var(--color-accent);
+        color: var(--color-bg);
+        padding: 0.25rem 0.75rem;
+        border-radius: var(--radius-full);
+        font-size: 0.75rem;
+        font-weight: 700;
+    }
+
+    .bookings-list {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .booking-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .booking-item:last-child {
+        border-bottom: none;
+    }
+
+    .booking-time-badge {
+        background: linear-gradient(135deg, var(--color-accent), #c9a143);
+        padding: 0.5rem 1rem;
+        border-radius: var(--radius-md);
+        font-weight: 700;
+        font-size: 0.875rem;
+        min-width: 80px;
+        text-align: center;
+    }
+
+    .booking-details {
+        flex: 1;
+    }
+
+    .booking-client-name {
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+    }
+
+    .booking-treatment-name {
+        font-size: 0.875rem;
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    .booking-meta {
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.5);
+        margin-top: 0.25rem;
+    }
+
+    .booking-actions {
+        display: flex;
+        align-items: center;
+    }
+
+    .status-badge {
+        padding: 0.25rem 0.75rem;
+        border-radius: var(--radius-full);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-weight: 600;
+    }
+
+    .status-confirmed {
+        background: rgba(76, 175, 80, 0.2);
+        color: #4caf50;
+    }
+
+    .status-pending {
+        background: rgba(255, 152, 0, 0.2);
+        color: #ff9800;
+    }
+
+    .btn-small {
+        padding: 0.25rem 0.75rem;
+        font-size: 0.75rem;
+        border: none;
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        font-weight: 600;
+    }
+
+    .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        backdrop-filter: blur(8px);
+    }
+
+    .modal-content {
+        background: var(--color-bg);
+        border-radius: var(--radius-lg);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .modal-header h2 {
+        margin: 0;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        font-size: 0.875rem;
+        color: rgba(255, 255, 255, 0.8);
+    }
+</style>
