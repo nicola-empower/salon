@@ -1,0 +1,75 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PortfolioGallery from "../components/PortfolioGallery";
+import "../styles/gallery.css";
+
+// Import all images from the gallery assets folder
+// We use eager loading to get the metadata immediately
+const imageFiles = import.meta.glob(
+    "/src/assets/gallery/*.{jpg,jpeg,png,webp}",
+    { eager: true },
+);
+
+// Process the imports into a clean array
+const images = Object.values(imageFiles).map((img: any) => {
+    const src = img.default.src;
+    const filename = src.split("/").pop();
+
+    // Determine category from filename (e.g. hair_1.jpg -> hair)
+    let category = "other";
+    if (filename.includes("hair")) category = "hair";
+    else if (filename.includes("nails")) category = "nails";
+    else if (filename.includes("spa")) category = "spa";
+
+    return {
+        id: src,
+        src: src,
+        category,
+    };
+});
+---
+
+<Layout title="Our Work">
+    <main class="container page-content">
+        <div class="text-center header-section">
+            <h1>Portfolio</h1>
+            <p class="subtitle">A showcase of our artistry and excellence</p>
+        </div>
+
+        <PortfolioGallery client:load images={images} />
+
+        <div class="text-center mt-xl">
+            <p class="muted">Ready to transform your look?</p>
+            <a href="/book" class="btn btn-primary mt-4">Book Appointment</a>
+        </div>
+    </main>
+</Layout>
+
+<style>
+    .page-content {
+        padding-top: 120px;
+        padding-bottom: 4rem;
+    }
+
+    .header-section {
+        margin-bottom: 3rem;
+    }
+
+    .subtitle {
+        color: var(--color-text-secondary);
+        font-family: var(--font-serif);
+        font-style: italic;
+        font-size: 1.5rem;
+        margin-top: 0.5rem;
+    }
+
+    .mt-xl {
+        margin-top: 5rem;
+    }
+    .mt-4 {
+        margin-top: 1rem;
+    }
+    .muted {
+        color: var(--color-text-secondary);
+    }
+</style>

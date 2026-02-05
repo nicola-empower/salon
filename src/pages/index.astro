@@ -1,0 +1,607 @@
+---
+import Layout from "../layouts/Layout.astro";
+import heroImage from "../assets/hero_salon_luxury.png";
+import { TREATMENTS, type Treatment } from "../data/mockData";
+
+const featuredTreatments = [
+	TREATMENTS.find((t) => t.id === "aes1"),
+	TREATMENTS.find((t) => t.id === "skin1"),
+	TREATMENTS.find((t) => t.id === "body1"),
+].filter((t): t is Treatment => t !== undefined);
+
+const categories = [
+	{
+		name: "Aesthetics & Medical",
+		image: "/aesthetics.png",
+		count: TREATMENTS.filter((t) => t.category === "Aesthetics").length,
+		link: "/treatments#aesthetics",
+	},
+	{
+		name: "Body & Wellness",
+		image: "/wellness.png",
+		count: TREATMENTS.filter((t) => t.category === "Body & Wellness")
+			.length,
+		link: "/treatments#wellness",
+	},
+	{
+		name: "Nails",
+		image: "/nails.png",
+		count: TREATMENTS.filter((t) => t.category === "Nails").length,
+		link: "/treatments#nails",
+	},
+];
+---
+
+<Layout title="Home">
+	<main>
+		<!-- Hero Section -->
+		<section class="hero">
+			<div class="hero-bg">
+				<img src={heroImage.src} alt="Luxury Salon Interior" />
+				<div class="overlay"></div>
+			</div>
+
+			<div class="container hero-content">
+				<h1 class="fade-in-up">The Salon</h1>
+				<p class="subtitle fade-in-up delay-1">
+					Where Beauty Meets Luxury
+				</p>
+				<p class="description fade-in-up delay-2">
+					A comprehensive beauty and wellness destination. From
+					advanced aesthetics to holistic therapy, we offer over 55+
+					treatments curated for your transformation.
+				</p>
+				<div class="cta-group fade-in-up delay-3">
+					<a href="/book" class="btn btn-primary">Book Appointment</a>
+					<a href="/treatments" class="btn btn-outline-light"
+						>View Menu</a
+					>
+				</div>
+			</div>
+		</section>
+
+		<!-- Category Showcase -->
+		<section class="section bg-dark">
+			<div class="container">
+				<h2 class="section-title text-center">Our Services</h2>
+				<p class="text-center subtitle-text">
+					Explore our comprehensive range of treatments
+				</p>
+
+				<div class="category-grid">
+					{
+						categories.map((cat) => (
+							<a href={cat.link} class="category-card">
+								<div class="category-image">
+									<img src={cat.image} alt={cat.name} />
+									<div class="category-overlay">
+										<span class="view-btn">Explore →</span>
+									</div>
+								</div>
+								<div class="category-info">
+									<h3>{cat.name}</h3>
+									<p class="count">{cat.count} Services</p>
+								</div>
+							</a>
+						))
+					}
+				</div>
+			</div>
+		</section>
+
+		<!-- AI Consultation Spotlight -->
+		<section class="section ai-spotlight">
+			<div class="container">
+				<div class="spotlight-content">
+					<div class="spotlight-text">
+						<span class="badge">✨ New Feature</span>
+						<h2>AI-Powered Skin Consultation</h2>
+						<p>
+							Get personalised treatment recommendations based on
+							your unique skin analysis. Our AI examines your
+							photo and suggests the perfect treatments for your
+							concerns.
+						</p>
+						<ul class="features-list">
+							<li>📸 Upload a selfie or use your camera</li>
+							<li>
+								🔬 Instant AI analysis of skin type & concerns
+							</li>
+							<li>💎 Personalised treatment recommendations</li>
+						</ul>
+						<a href="/consultation" class="btn btn-primary btn-glow"
+							>Try AI Consultation Free</a
+						>
+					</div>
+					<div class="spotlight-visual">
+						<div class="ai-demo-card">
+							<div class="demo-header">AI Analysis</div>
+							<div class="demo-content">
+								<div class="scan-lines"></div>
+								<p class="demo-text">Analysing skin type...</p>
+								<div class="progress-bar">
+									<div class="progress"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Featured Signature Treatments -->
+		<section class="section">
+			<div class="container">
+				<h2 class="section-title text-center">Signature Treatments</h2>
+
+				<div class="grid-3">
+					{
+						featuredTreatments.map((item) => (
+							<div class="card">
+								<div class="card-content">
+									<span class="category">
+										{item.category}
+									</span>
+									<h3>{item.name}</h3>
+									<p>{item.description}</p>
+									<div class="card-footer">
+										<span class="price">£{item.price}</span>
+										<span class="duration">
+											{item.duration} mins
+										</span>
+									</div>
+								</div>
+							</div>
+						))
+					}
+				</div>
+
+				<div class="text-center mt-lg">
+					<p class="stats-text">
+						Over <strong>55+ treatments</strong> available
+					</p>
+					<a href="/treatments" class="btn btn-outline"
+						>View Complete Menu</a
+					>
+				</div>
+			</div>
+		</section>
+	</main>
+</Layout>
+
+<style>
+	/* Hero */
+	.hero {
+		position: relative;
+		height: 100vh;
+		min-height: 600px;
+		display: flex;
+		align-items: center;
+		color: white;
+		overflow: hidden;
+	}
+
+	.hero-bg {
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+	}
+
+	.hero-bg img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		animation: zoomOut 20s infinite alternate;
+	}
+
+	.overlay {
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(
+			to bottom,
+			rgba(0, 0, 0, 0.3),
+			rgba(0, 0, 0, 0.7)
+		);
+	}
+
+	.hero-content {
+		position: relative;
+		max-width: 800px;
+		padding-top: 60px;
+	}
+
+	h1 {
+		font-size: clamp(3rem, 8vw, 6rem);
+		margin-bottom: 1rem;
+		color: var(--color-accent);
+	}
+
+	.subtitle {
+		font-family: var(--font-serif);
+		font-size: clamp(1.5rem, 3vw, 2.5rem);
+		margin-bottom: 2rem;
+		font-style: italic;
+	}
+
+	.description {
+		font-size: 1.125rem;
+		max-width: 600px;
+		margin-bottom: 3rem;
+		opacity: 0.9;
+	}
+
+	.cta-group {
+		display: flex;
+		gap: 1rem;
+		flex-wrap: wrap;
+	}
+
+	.btn-outline-light {
+		border: 1px solid white;
+		color: white;
+		padding: 0.75rem 1.5rem;
+		border-radius: var(--radius-full);
+		text-transform: uppercase;
+		font-weight: 600;
+		font-size: 0.875rem;
+		transition: var(--transition-fast);
+	}
+
+	.btn-outline-light:hover {
+		background: white;
+		color: black;
+	}
+
+	/* Sections */
+	.section {
+		padding: var(--spacing-xl) 0;
+	}
+
+	.bg-dark {
+		background: var(--color-surface);
+	}
+
+	.section-title {
+		margin-bottom: var(--spacing-md);
+		font-size: 3rem;
+	}
+
+	.subtitle-text {
+		color: var(--color-text-secondary);
+		font-size: 1.2rem;
+		margin-bottom: var(--spacing-lg);
+	}
+
+	.text-center {
+		text-align: center;
+	}
+	.mt-lg {
+		margin-top: var(--spacing-lg);
+	}
+
+	/* Category Grid */
+	.category-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+		gap: 2rem;
+		margin-top: 3rem;
+	}
+
+	.category-card {
+		display: block;
+		border-radius: var(--radius-md);
+		overflow: hidden;
+		background: var(--color-bg);
+		border: 1px solid rgba(255, 255, 255, 0.05);
+		transition: all 0.4s ease;
+	}
+
+	.category-card:hover {
+		transform: translateY(-8px);
+		border-color: var(--color-accent-dim);
+		box-shadow: var(--shadow-md);
+	}
+
+	.category-image {
+		position: relative;
+		aspect-ratio: 4/3;
+		overflow: hidden;
+	}
+
+	.category-image img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: transform 0.6s ease;
+	}
+
+	.category-card:hover .category-image img {
+		transform: scale(1.1);
+	}
+
+	.category-overlay {
+		position: absolute;
+		inset: 0;
+		background: rgba(0, 0, 0, 0.4);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		opacity: 0;
+		transition: opacity 0.3s ease;
+	}
+
+	.category-card:hover .category-overlay {
+		opacity: 1;
+	}
+
+	.view-btn {
+		padding: 0.75rem 2rem;
+		border: 2px solid white;
+		color: white;
+		border-radius: var(--radius-full);
+		text-transform: uppercase;
+		font-size: 0.875rem;
+		font-weight: 600;
+		letter-spacing: 0.1em;
+	}
+
+	.category-info {
+		padding: 1.5rem;
+	}
+
+	.category-info h3 {
+		font-size: 1.5rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.count {
+		color: var(--color-accent);
+		font-size: 0.9rem;
+		font-weight: 600;
+	}
+
+	/* Card Grid */
+	.grid-3 {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		gap: 2rem;
+	}
+
+	.card {
+		background: var(--color-surface);
+		padding: 2rem;
+		border-radius: var(--radius-sm);
+		border: 1px solid rgba(255, 255, 255, 0.05);
+		transition: var(--transition-smooth);
+	}
+
+	.card:hover {
+		transform: translateY(-5px);
+		border-color: var(--color-accent-dim);
+		box-shadow: var(--shadow-md);
+	}
+
+	.card-content {
+		position: relative;
+		z-index: 1;
+	}
+
+	.category {
+		font-size: 0.75rem;
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+		color: var(--color-accent);
+		margin-bottom: 0.5rem;
+		display: block;
+	}
+
+	.card h3 {
+		margin-bottom: 1rem;
+		font-size: 1.5rem;
+	}
+
+	.card-footer {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-top: 2rem;
+		padding-top: 1rem;
+		border-top: 1px solid rgba(255, 255, 255, 0.1);
+	}
+
+	.price {
+		font-size: 1.25rem;
+		font-weight: 600;
+	}
+
+	.duration {
+		font-size: 0.875rem;
+		opacity: 0.6;
+	}
+
+	.stats-text {
+		font-size: 1.1rem;
+		margin-bottom: 1.5rem;
+		color: var(--color-text-secondary);
+	}
+
+	.stats-text strong {
+		color: var(--color-accent);
+	}
+
+	/* Animations */
+	@keyframes zoomOut {
+		from {
+			transform: scale(1.1);
+		}
+		to {
+			transform: scale(1);
+		}
+	}
+
+	.fade-in-up {
+		opacity: 0;
+		transform: translateY(20px);
+		animation: fadeInUp 0.8s forwards;
+	}
+
+	.delay-1 {
+		animation-delay: 0.2s;
+	}
+	.delay-2 {
+		animation-delay: 0.4s;
+	}
+	.delay-3 {
+		animation-delay: 0.6s;
+	}
+
+	@keyframes fadeInUp {
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	/* AI Spotlight */
+	.ai-spotlight {
+		background: linear-gradient(
+			135deg,
+			rgba(212, 175, 55, 0.05),
+			rgba(212, 175, 55, 0.02)
+		);
+		border-top: 1px solid rgba(212, 175, 55, 0.1);
+		border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+	}
+
+	.spotlight-content {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 4rem;
+		align-items: center;
+	}
+
+	.spotlight-text .badge {
+		display: inline-block;
+		padding: 0.5rem 1rem;
+		background: rgba(212, 175, 55, 0.15);
+		border: 1px solid var(--color-accent);
+		border-radius: var(--radius-full);
+		font-size: 0.85rem;
+		font-weight: 600;
+		margin-bottom: 1.5rem;
+		color: var(--color-accent);
+	}
+
+	.spotlight-text h2 {
+		margin-bottom: 1rem;
+	}
+
+	.spotlight-text p {
+		color: var(--color-text-secondary);
+		margin-bottom: 2rem;
+		line-height: 1.8;
+	}
+
+	.features-list {
+		list-style: none;
+		margin-bottom: 2rem;
+	}
+
+	.features-list li {
+		padding: 0.75rem 0;
+		font-size: 1.05rem;
+	}
+
+	.btn-glow {
+		box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+	}
+
+	.btn-glow:hover {
+		box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+	}
+
+	.ai-demo-card {
+		background: var(--color-surface);
+		border-radius: var(--radius-lg);
+		border: 1px solid rgba(212, 175, 55, 0.3);
+		overflow: hidden;
+		box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+	}
+
+	.demo-header {
+		background: rgba(212, 175, 55, 0.1);
+		padding: 1rem;
+		text-align: center;
+		font-weight: 600;
+		border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+	}
+
+	.demo-content {
+		padding: 3rem 2rem;
+		position: relative;
+	}
+
+	.scan-lines {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		height: 2px;
+		background: var(--color-accent);
+		animation: scan 3s ease-in-out infinite;
+		box-shadow: 0 0 10px var(--color-accent);
+	}
+
+	@keyframes scan {
+		0%,
+		100% {
+			top: 0;
+		}
+		50% {
+			top: 100%;
+		}
+	}
+
+	.demo-text {
+		text-align: center;
+		margin-bottom: 1.5rem;
+		color: var(--color-accent);
+		font-weight: 600;
+	}
+
+	.progress-bar {
+		width: 100%;
+		height: 4px;
+		background: rgba(255, 255, 255, 0.1);
+		border-radius: 2px;
+		overflow: hidden;
+	}
+
+	.progress {
+		width: 60%;
+		height: 100%;
+		background: linear-gradient(
+			90deg,
+			var(--color-accent),
+			var(--color-accent-light)
+		);
+		animation: progressMove 2s ease-in-out infinite;
+	}
+
+	@keyframes progressMove {
+		0%,
+		100% {
+			transform: translateX(-100%);
+		}
+		50% {
+			transform: translateX(100%);
+		}
+	}
+
+	@media (max-width: 968px) {
+		.spotlight-content {
+			grid-template-columns: 1fr;
+			gap: 3rem;
+		}
+	}
+</style>

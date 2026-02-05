@@ -1,0 +1,266 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { TREATMENTS } from "../data/mockData";
+
+const categories = Array.from(new Set(TREATMENTS.map((t) => t.category)));
+
+// Create slug from category name
+const slugify = (text: string) =>
+    text.toLowerCase().replace(/\s+/g, "-").replace(/&/g, "and");
+---
+
+<Layout title="Our Treatments">
+    <main class="container page-content">
+        <div class="text-center mb-xl">
+            <h1>Treatment Menu</h1>
+            <p class="subtitle">Over 55+ bespoke services tailored to you</p>
+        </div>
+
+        <!-- Quick Navigation -->
+        <nav class="category-nav">
+            {
+                categories.map((category) => (
+                    <a href={`#${slugify(category)}`} class="nav-pill">
+                        {category}
+                    </a>
+                ))
+            }
+        </nav>
+
+        {
+            categories.map((category) => (
+                <section class="category-section" id={slugify(category)}>
+                    <div class="category-header">
+                        <h2 class="category-title">{category}</h2>
+                        <span class="service-count">
+                            {
+                                TREATMENTS.filter(
+                                    (t) => t.category === category,
+                                ).length
+                            }{" "}
+                            Services
+                        </span>
+                    </div>
+
+                    <div class="menu-grid">
+                        {TREATMENTS.filter((t) => t.category === category).map(
+                            (item) => (
+                                <div class="menu-item">
+                                    <div class="item-header">
+                                        <h3>{item.name}</h3>
+                                        <span class="price">£{item.price}</span>
+                                    </div>
+                                    <p class="description">
+                                        {item.description}
+                                    </p>
+                                    <div class="item-meta">
+                                        <span class="duration">
+                                            {item.duration} mins
+                                        </span>
+                                        {item.requiresMedical && (
+                                            <span class="badge medical">
+                                                Medical Professional
+                                            </span>
+                                        )}
+                                    </div>
+                                </div>
+                            ),
+                        )}
+                    </div>
+                </section>
+            ))
+        }
+
+        <div class="text-center mt-xl cta-section">
+            <h3>Ready to book?</h3>
+            <p class="cta-text">
+                Choose from our comprehensive range of premium treatments
+            </p>
+            <a href="/book" class="btn btn-primary">Book an Appointment</a>
+        </div>
+    </main>
+</Layout>
+
+<style>
+    .page-content {
+        padding-top: 120px;
+        padding-bottom: 4rem;
+    }
+
+    .mb-xl {
+        margin-bottom: 4rem;
+    }
+    .mt-xl {
+        margin-top: 4rem;
+    }
+
+    .subtitle {
+        color: var(--color-text-secondary);
+        font-size: 1.2rem;
+        margin-top: 0.5rem;
+    }
+
+    /* Category Navigation */
+    .category-nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.75rem;
+        margin-bottom: 4rem;
+        padding: 2rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-pill {
+        padding: 0.5rem 1.25rem;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: var(--radius-full);
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        transition: all 0.3s ease;
+    }
+
+    .nav-pill:hover {
+        background: rgba(212, 175, 55, 0.1);
+        border-color: var(--color-accent);
+        color: var(--color-accent);
+    }
+
+    /* Category Sections */
+    .category-section {
+        margin-bottom: 5rem;
+        scroll-margin-top: 100px; /* Offset for fixed nav */
+    }
+
+    .category-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid var(--color-accent);
+    }
+
+    .category-title {
+        color: var(--color-accent);
+        font-size: 2rem;
+    }
+
+    .service-count {
+        font-size: 0.9rem;
+        color: var(--color-text-secondary);
+        font-weight: 600;
+    }
+
+    /* Menu Grid */
+    .menu-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 2rem 3rem;
+    }
+
+    .menu-item {
+        padding: 1.5rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-md);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        transition: all 0.3s ease;
+    }
+
+    .menu-item:hover {
+        border-color: var(--color-accent-dim);
+        transform: translateX(5px);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .item-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 0.75rem;
+        gap: 1rem;
+    }
+
+    .item-header h3 {
+        font-size: 1.25rem;
+        font-family: var(--font-serif);
+        flex: 1;
+    }
+
+    .price {
+        font-weight: 600;
+        color: var(--color-accent);
+        font-size: 1.1rem;
+        white-space: nowrap;
+    }
+
+    .description {
+        font-size: 0.9rem;
+        color: var(--color-text-secondary);
+        margin-bottom: 1rem;
+        line-height: 1.5;
+    }
+
+    .item-meta {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .duration {
+        font-size: 0.8rem;
+        opacity: 0.6;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .badge {
+        font-size: 0.7rem;
+        padding: 0.25rem 0.75rem;
+        border-radius: var(--radius-full);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-weight: 600;
+    }
+
+    .badge.medical {
+        background: rgba(76, 175, 80, 0.15);
+        color: #4caf50;
+        border: 1px solid rgba(76, 175, 80, 0.3);
+    }
+
+    /* CTA Section */
+    .cta-section {
+        padding: 3rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .cta-section h3 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+
+    .cta-text {
+        color: var(--color-text-secondary);
+        margin-bottom: 2rem;
+        font-size: 1.1rem;
+    }
+
+    @media (max-width: 768px) {
+        .menu-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .category-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+    }
+</style>

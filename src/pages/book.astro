@@ -1,0 +1,33 @@
+---
+import Layout from "../layouts/Layout.astro";
+import BookingSystem from "../components/BookingSystem";
+---
+
+<Layout title="Book Appointment">
+    <main class="container page-content">
+        <div class="header text-center">
+            <h1>Book Your Appointment</h1>
+            <p class="subtitle">Select your preferred treatment and time</p>
+        </div>
+
+        <BookingSystem client:load />
+    </main>
+</Layout>
+
+<style>
+    .page-content {
+        padding-top: 120px; /* Nav offset */
+        padding-bottom: 4rem;
+        min-height: 100vh;
+    }
+
+    .header {
+        margin-bottom: 3rem;
+    }
+
+    .subtitle {
+        color: var(--color-text-secondary);
+        font-size: 1.2rem;
+        margin-top: 0.5rem;
+    }
+</style>

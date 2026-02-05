@@ -1,0 +1,435 @@
+/* Skin Consultation Styles */
+
+.skin-consultation {
+    min-height: 70vh;
+    padding: 2rem 0;
+}
+
+/* Upload Section */
+.upload-section {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.upload-section h2 {
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 3rem;
+    font-size: 1.1rem;
+}
+
+.error-banner {
+    background: rgba(244, 67, 54, 0.1);
+    border: 1px solid #f44336;
+    color: #ff6b6b;
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    margin-bottom: 2rem;
+}
+
+.upload-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.option-card {
+    background: var(--color-surface);
+    border: 2px dashed rgba(255, 255, 255, 0.2);
+    padding: 3rem 2rem;
+    border-radius: var(--radius-lg);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    width: 100%;
+}
+
+.option-card:hover {
+    border-color: var(--color-accent);
+    background: rgba(212, 175, 55, 0.05);
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-glow);
+}
+
+.option-card .icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.option-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.option-card p {
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 0.95rem;
+}
+
+/* Camera */
+.camera-container {
+    margin: 2rem 0;
+}
+
+.camera-feed {
+    width: 100%;
+    max-width: 640px;
+    border-radius: var(--radius-lg);
+    margin-bottom: 1.5rem;
+}
+
+.camera-controls {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+/* Preview */
+.preview-section {
+    margin: 2rem 0;
+}
+
+.image-preview {
+    max-width: 500px;
+    width: 100%;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    margin-bottom: 2rem;
+}
+
+.preview-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.disclaimer {
+    margin-top: 3rem;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.disclaimer small {
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.6;
+    font-size: 0.9rem;
+}
+
+/* Analysing */
+.analysing-section {
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loader-container {
+    text-align: center;
+}
+
+.ai-loader {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 2rem;
+}
+
+.pulse-ring {
+    position: absolute;
+    inset: 0;
+    border: 3px solid var(--color-accent);
+    border-radius: 50%;
+    animation: pulse 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+
+.pulse-ring.delay-1 {
+    animation-delay: 0.5s;
+}
+
+.pulse-ring.delay-2 {
+    animation-delay: 1s;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.8);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1.2);
+        opacity: 0;
+    }
+}
+
+.loader-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 4rem;
+    animation: rotate 3s linear infinite;
+}
+
+@keyframes rotate {
+    from {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+/* Results */
+.results-section {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3rem;
+}
+
+.btn-outline-sm {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--color-accent);
+    color: var(--color-accent);
+    border-radius: var(--radius-full);
+    font-size: 0.875rem;
+    transition: all 0.3s;
+}
+
+.btn-outline-sm:hover {
+    background: var(--color-accent);
+    color: var(--color-bg);
+}
+
+.results-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 3rem;
+    margin-bottom: 4rem;
+}
+
+.result-image img {
+    width: 100%;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+}
+
+.result-overview {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.info-card {
+    background: var(--color-surface);
+    padding: 1.5rem;
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.info-card h3 {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-accent);
+    margin-bottom: 1rem;
+}
+
+.highlight {
+    font-size: 1.5rem;
+    font-family: var(--font-serif);
+    color: var(--color-accent);
+}
+
+.concerns-list {
+    list-style: none;
+    padding: 0;
+}
+
+.concerns-list li {
+    padding: 0.75rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: var(--radius-sm);
+    margin-bottom: 0.5rem;
+    border-left: 3px solid var(--color-accent);
+    padding-left: 1rem;
+}
+
+.summary-card p {
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.05rem;
+}
+
+/* Recommendations */
+.recommendations-section {
+    background: var(--color-surface);
+    padding: 3rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+}
+
+.treatment-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.treatment-card {
+    background: var(--color-bg);
+    padding: 2rem;
+    border-radius: var(--radius-md);
+    border: 2px solid rgba(255, 255, 255, 0.05);
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.treatment-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+}
+
+.treatment-card.priority-high {
+    border-color: var(--color-accent);
+    background: rgba(212, 175, 55, 0.03);
+}
+
+.treatment-card.priority-medium {
+    border-color: rgba(100, 181, 246, 0.5);
+}
+
+.priority-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.25rem 0.75rem;
+    background: var(--color-accent);
+    color: var(--color-bg);
+    border-radius: var(--radius-full);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+}
+
+.treatment-card.priority-medium .priority-badge {
+    background: rgba(100, 181, 246, 0.8);
+}
+
+.treatment-card.priority-low .priority-badge {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.treatment-card h4 {
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+    padding-right: 5rem;
+}
+
+.treatment-category {
+    font-size: 0.85rem;
+    color: var(--color-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+}
+
+.reason {
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+}
+
+.treatment-meta {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.treatment-meta .price {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-accent);
+}
+
+.treatment-meta .duration {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+}
+
+/* CTA Footer */
+.cta-footer {
+    text-align: center;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cta-footer p {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.btn-lg {
+    padding: 1rem 3rem;
+    font-size: 1.1rem;
+}
+
+/* Animations */
+.fade-in {
+    animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .results-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .treatment-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .recommendations-section {
+        padding: 2rem 1.5rem;
+    }
+
+    .upload-options {
+        grid-template-columns: 1fr;
+    }
+}

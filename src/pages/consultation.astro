@@ -1,0 +1,18 @@
+---
+import Layout from "../layouts/Layout.astro";
+import SkinConsultation from "../components/SkinConsultation";
+import "../styles/consultation.css";
+---
+
+<Layout title="AI Skin Consultation">
+    <main class="container page-content">
+        <SkinConsultation client:load />
+    </main>
+</Layout>
+
+<style>
+    .page-content {
+        padding-top: 100px;
+        padding-bottom: 4rem;
+    }
+</style>

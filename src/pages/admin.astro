@@ -1,0 +1,25 @@
+---
+import Layout from "../layouts/Layout.astro";
+import AdminDashboard from "../components/AdminDashboard";
+---
+
+<Layout title="Staff Portal">
+    <main class="container page-content">
+        <div class="text-center mb-lg">
+            <h1>Salon Management</h1>
+            <p class="subtitle">Welcome back, Admin</p>
+        </div>
+
+        <AdminDashboard client:only="react" />
+    </main>
+</Layout>
+
+<style>
+    .page-content {
+        padding-top: 120px;
+        padding-bottom: 4rem;
+    }
+    .mb-lg {
+        margin-bottom: 3rem;
+    }
+</style>
