@@ -40,9 +40,10 @@ export const POST: APIRoute = async ({ request }) => {
             });
         } catch (geminiError) {
             // If Gemini fails, log the error and use mock data
-            console.error('[API] Gemini failed, using mock data:', geminiError);
-            console.log('[API] Returning mock analysis result');
+            console.error('[API] Gemini failed:', geminiError);
 
+            // Mock fallback enabled for stability
+            console.log('[API] Returning mock analysis result');
             return new Response(JSON.stringify(MOCK_RESPONSE), {
                 status: 200,
                 headers: { 'Content-Type': 'application/json' }

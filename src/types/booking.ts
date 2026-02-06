@@ -8,6 +8,7 @@ export interface StaffProfile {
     phone: string;
     photo?: string;
     specialties: string[];
+    categories: string[]; // Maps to Treatment.category for booking logic
     bio: string;
     yearsExperience: number;
     age: number;
@@ -16,6 +17,7 @@ export interface StaffProfile {
     talkPoint: string;
     workingHours: Record<string, { start: string; end: string } | null>;
     holidayDates: string[]; // ISO date strings
+    color?: string; // Hex code for rota personalization
 }
 
 export interface ClientRecord {
@@ -55,11 +57,11 @@ export interface EnhancedBooking {
     time: string; // HH:mm format
     duration: number; // minutes
     price: number;
-    status: 'pending' | 'confirmed' | 'completed' | 'cancelled' | 'no-show';
+    status: 'pending' | 'confirmed' | 'completed' | 'cancelled' | 'no-show' | 'break';
     paymentStatus: 'unpaid' | 'deposit' | 'paid' | 'refunded';
     paymentMethod?: 'card' | 'cash' | 'online';
     notes: string;
-    createdBy: 'client' | 'staff' | 'receptionist';
+    createdBy: 'client' | 'staff' | 'receptionist' | 'system';
     createdAt: string;
 }
 

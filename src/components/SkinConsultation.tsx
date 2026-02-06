@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import ScanningOverlay from './ScanningOverlay'; // Import the new component
 
 // Import types and data safely
 import type { Treatment } from '../data/mockData';
@@ -117,13 +118,45 @@ const SkinConsultation = () => {
         if (!result) return [];
 
         try {
+            console.log('[Client] Importing TREATMENTS...');
             // Dynamically import TREATMENTS only when needed
             const { TREATMENTS } = await import('../data/mockData');
+            console.log('[Client] Loaded treatments catalog:', TREATMENTS.length);
 
-            return result.recommendations.map(rec => {
-                const treatment = TREATMENTS.find(t => t.id === rec.treatmentId);
+            if (!result.recommendations || !Array.isArray(result.recommendations)) {
+                console.error('[Client] Result.recommendations is missing or not an array:', result.recommendations);
+                return [];
+            }
+
+            const mapped = result.recommendations.map(rec => {
+                // Robust matching: trim and case-insensitive
+                const cleanId = rec.treatmentId ? rec.treatmentId.toLowerCase().trim() : '';
+                console.log(`[Client] Looking for treatment ID: "${cleanId}" (Original: "${rec.treatmentId}")`);
+
+                const treatment = TREATMENTS.find(t => t.id.toLowerCase() === cleanId);
+
+                if (!treatment) {
+                    console.warn(`[Client] Warning: Treatment ID "${rec.treatmentId}" not found in catalog.`);
+                    // Fallback so the user still sees the recommendation
+                    return {
+                        ...rec,
+                        treatment: {
+                            id: rec.treatmentId || 'unknown',
+                            name: `Recommended Treatment (${rec.treatmentId})`,
+                            category: 'Custom Recommendation',
+                            price: 0,
+                            duration: 0,
+                            description: 'Personalized suggestion from your AI analysis.'
+                        }
+                    };
+                }
+                console.log(`[Client] Found match: ${treatment.name}`);
                 return { ...rec, treatment };
-            }).filter(r => r.treatment);
+            });
+
+            console.log('[Client] Mapped treatments:', mapped);
+            return mapped;
+            // Removed .filter() so we always show the AI's suggestions even if ID mapping fails
         } catch (err) {
             console.error('Error loading treatments:', err);
             return [];
@@ -230,20 +263,27 @@ const SkinConsultation = () => {
                 </div>
             )}
 
+
             {step === 'analysing' && (
-                <div className="analysing-section">
-                    <div className="loader-container">
-                        <div className="ai-loader">
-                            <div className="pulse-ring"></div>
-                            <div className="pulse-ring delay-1"></div>
-                            <div className="pulse-ring delay-2"></div>
-                            <span className="loader-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 7 6.82 21.18a2.83 2.83 0 0 1-3.99-.01v0a2.83 2.83 0 0 1 0-4L17 3" /><path d="m16 2 6 6" /><path d="M12 16H4" /><path d="M12 20H8" /></svg>
-                            </span>
-                        </div>
-                        <h3>Analysing Your Skin...</h3>
-                        <p>Our AI is examining your skin type, concerns, and recommending treatments</p>
-                    </div>
+                <div className="analysing-section" style={{ position: 'relative', minHeight: '400px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    {/* Render the uploaded image in background for the scanner to layer over */}
+                    {imagePreview && (
+                        <img
+                            src={imagePreview}
+                            alt="Scanning"
+                            style={{
+                                position: 'absolute',
+                                top: 0,
+                                left: 0,
+                                width: '100%',
+                                height: '100%',
+                                objectFit: 'cover',
+                                opacity: 0.3,
+                                filter: 'blur(2px)'
+                            }}
+                        />
+                    )}
+                    <ScanningOverlay />
                 </div>
             )}
 
@@ -301,12 +341,15 @@ const SkinConsultation = () => {
                             ))}
                         </div>
 
+
                         <div className="cta-footer">
                             <p>Ready to transform your skin?</p>
                             <a href="/book" className="btn btn-primary btn-lg">
                                 Book Your Treatment
                             </a>
                         </div>
+
+
                     </div>
                 </div>
             )}

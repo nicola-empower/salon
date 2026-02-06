@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { TREATMENTS, STAFF, type Treatment, type Staff } from '../data/mockData';
-import '../styles/booking.css'; // specific styles for this widget
+import { TREATMENTS, type Treatment } from '../data/mockData';
+import { STAFF_PROFILES } from '../data/staff-profiles'; // New import
+import '../styles/booking.css';
 
 const steps = ['Service', 'Staff', 'Date', 'Details', 'Confirm'];
 
@@ -8,7 +9,8 @@ const BookingSystem = () => {
     const [step, setStep] = useState(1);
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
     const [selectedTreatment, setSelectedTreatment] = useState<Treatment | null>(null);
-    const [selectedStaff, setSelectedStaff] = useState<Staff | null>(null);
+    // Use proper StaffProfile type if available, or infer
+    const [selectedStaff, setSelectedStaff] = useState<typeof STAFF_PROFILES[0] | null>(null);
     const [selectedDate, setSelectedDate] = useState<string>('');
     const [selectedTime, setSelectedTime] = useState<string>('');
     const [userDetails, setUserDetails] = useState({ name: '', email: '', phone: '' });
@@ -19,7 +21,7 @@ const BookingSystem = () => {
         : [];
 
     const relevantStaff = selectedTreatment
-        ? STAFF.filter(s => s.specialties.includes(selectedTreatment.category))
+        ? STAFF_PROFILES.filter(s => s.categories.includes(selectedTreatment.category))
         : [];
 
     const handleNext = () => setStep(prev => prev + 1);
@@ -79,7 +81,8 @@ const BookingSystem = () => {
                         className={`option-card ${selectedStaff?.id === s.id ? 'active' : ''}`}
                         onClick={() => setSelectedStaff(s)}
                     >
-                        <img src={s.avatar} alt={s.name} className="avatar-sm" />
+                        {/* Use photo instead of avatar */}
+                        <img src={s.photo} alt={s.name} className="avatar-sm" />
                         <span>{s.name}</span>
                         <small>{s.role}</small>
                     </button>

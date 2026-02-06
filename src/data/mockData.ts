@@ -25,7 +25,7 @@ export interface Appointment {
   treatmentId: string;
   date: string; // ISO date string
   time: string; // HH:mm
-  status: 'confirmed' | 'pending' | 'cancelled';
+  status: 'confirmed' | 'pending' | 'cancelled' | 'checked-in' | 'break';
 }
 
 export const TREATMENTS: Treatment[] = [
@@ -95,84 +95,129 @@ export const TREATMENTS: Treatment[] = [
   { id: 'makeup4', name: 'Makeup Lesson', category: 'Makeup', duration: 75, price: 90, description: 'One-on-one tutorial to master techniques.' },
 ];
 
-export const STAFF: Staff[] = [
-  {
-    id: 's1',
-    name: 'Dr. Emily Chen',
-    role: 'Medical Director & Aesthetic Practitioner',
-    specialties: ['Aesthetics'],
-    avatar: 'https://i.pravatar.cc/150?u=emily',
-    bio: 'Board-certified with 10+ years in cosmetic injectables and skin rejuvenation.'
-  },
-  {
-    id: 's2',
-    name: 'Sophie Martinez',
-    role: 'Senior Aesthetician',
-    specialties: ['Skincare', 'Lashes & Brows'],
-    avatar: 'https://i.pravatar.cc/150?u=sophie',
-    bio: 'Specialist in luxury facials, HydraFacial, and brow artistry.'
-  },
-  {
-    id: 's3',
-    name: 'James Walker',
-    role: 'Massage Therapist (LMT)',
-    specialties: ['Body & Wellness'],
-    avatar: 'https://i.pravatar.cc/150?u=james',
-    bio: 'Licensed massage therapist with expertise in deep tissue and sports massage.'
-  },
-  {
-    id: 's4',
-    name: 'Lara Hudson',
-    role: 'Nail Technician',
-    specialties: ['Nails'],
-    avatar: 'https://i.pravatar.cc/150?u=lara',
-    bio: 'Certified in gel extensions, nail art, and luxury manicure services.'
-  },
-  {
-    id: 's5',
-    name: 'Maya Patel',
-    role: 'Lash & Brow Specialist',
-    specialties: ['Lashes & Brows'],
-    avatar: 'https://i.pravatar.cc/150?u=maya',
-    bio: 'Expert in volume lash extensions, lamination, and HD brows.'
-  },
-  {
-    id: 's6',
-    name: 'Alex Thompson',
-    role: 'Waxing Specialist',
-    specialties: ['Waxing'],
-    avatar: 'https://i.pravatar.cc/150?u=alex',
-    bio: 'Gentle, efficient waxing with premium products for minimal discomfort.'
-  },
-  {
-    id: 's7',
-    name: 'Sarah Jenkins',
-    role: 'Senior Hair Stylist',
-    specialties: ['Hair'],
-    avatar: 'https://i.pravatar.cc/150?u=sarah',
-    bio: 'Balayage expert and color correction specialist with 8 years experience.'
-  },
-  {
-    id: 's8',
-    name: 'Chloe Rivers',
-    role: 'Makeup Artist (MUA)',
-    specialties: ['Makeup'],
-    avatar: 'https://i.pravatar.cc/150?u=chloe',
-    bio: 'Bridal and editorial makeup artist with a passion for natural beauty.'
-  },
-  {
-    id: 's9',
-    name: 'Nina Foster',
-    role: 'Holistic Therapist',
-    specialties: ['Body & Wellness'],
-    avatar: 'https://i.pravatar.cc/150?u=nina',
-    bio: 'Reiki master and reflexology practitioner focused on energy healing.'
-  },
+// DEPRECATED: Staff data now in staff-profiles.ts. Kept for reference but unused.
+// export const STAFF: Staff[] = [ ... ];
+
+const generateAppointments = () => {
+  const apps: Appointment[] = [];
+  const startDay = 10; // Start from Feb 10
+  const endDay = 28;   // Go effectively to end of Feb
+
+  // Helper to get random item from array
+  const random = <T>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
+
+  const statuses: Appointment['status'][] = ['confirmed', 'confirmed', 'confirmed', 'pending'];
+  const times = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'];
+  const clientNames = ['Alice Fox', 'Ben Carter', 'Clara Hughes', 'David Lee', 'Emma Thompson', 'Fiona Green', 'George Hall', 'Hannah Wright'];
+
+  let idCounter = 1;
+
+  for (let day = startDay; day <= endDay; day++) {
+    // Generate 3-6 appointments per day
+    const numApps = Math.floor(Math.random() * 4) + 3;
+    const dayStr = `2026-02-${day.toString().padStart(2, '0')}`;
+
+    // Shuffle times to avoid collisions
+    const shuffledTimes = [...times].sort(() => 0.5 - Math.random());
+
+    for (let i = 0; i < numApps; i++) {
+      // Pick a specialized staff for a random treatment if possible, or just random
+      // For simplicity in mock data generation, we'll just pick random valid pairs manually or loosely
+      const staffId = random(['staff-1', 'staff-2', 'staff-3', 'staff-4', 'staff-5', 'staff-6', 'staff-7', 'staff-8']);
+      const treatment = random(TREATMENTS);
+
+      apps.push({
+        id: `app-${idCounter++}`,
+        clientName: random(clientNames),
+        clientEmail: 'client@example.com',
+        staffId: staffId,
+        treatmentId: treatment.id,
+        date: dayStr,
+        time: shuffledTimes[i],
+        status: random(statuses)
+      });
+    }
+  }
+
+  // Add specific ones for the user's specific "Week of 23 Feb" screenshot check
+  // Monday 23rd Feb 2026
+  apps.push({ id: 'fixed-1', clientName: 'Sarah Jenkins', clientEmail: 'sarah@test.com', staffId: 'staff-1', treatmentId: 'hair2', date: '2026-02-23', time: '10:00', status: 'confirmed' });
+  apps.push({ id: 'fixed-2', clientName: 'Mike Ross', clientEmail: 'mike@test.com', staffId: 'staff-2', treatmentId: 'hair1', date: '2026-02-23', time: '11:00', status: 'confirmed' });
+  apps.push({ id: 'fixed-3', clientName: 'Emma Watson', clientEmail: 'emma@test.com', staffId: 'staff-3', treatmentId: 'skin2', date: '2026-02-24', time: '14:00', status: 'pending' });
+  apps.push({ id: 'fixed-4', clientName: 'Tom Hardy', clientEmail: 'tom@test.com', staffId: 'staff-2', treatmentId: 'hair3', date: '2026-02-25', time: '09:00', status: 'confirmed' });
+
+  return apps;
+};
+
+export const INITIAL_APPOINTMENTS: Appointment[] = generateAppointments();
+
+// ========== ENTERPRISE MANAGER DATA ==========
+
+export interface InventoryItem {
+  id: string;
+  name: string;
+  category: 'Professional' | 'Retail';
+  stockLevel: number;
+  minLevel: number;
+  unit: string;
+  lastOrdered: string;
+  status: 'ok' | 'low' | 'critical';
+}
+
+export const INVENTORY: InventoryItem[] = [
+  { id: 'inv1', name: 'Botox® Vials (100u)', category: 'Professional', stockLevel: 12, minLevel: 10, unit: 'vials', lastOrdered: '2026-01-15', status: 'ok' },
+  { id: 'inv2', name: 'Juvederm Ultra 3', category: 'Professional', stockLevel: 3, minLevel: 5, unit: 'boxes', lastOrdered: '2026-01-10', status: 'low' },
+  { id: 'inv3', name: 'Obagi Nu-Derm Kit', category: 'Retail', stockLevel: 2, minLevel: 4, unit: 'kits', lastOrdered: '2025-12-20', status: 'critical' },
+  { id: 'inv4', name: 'HydraFacial Serums (Activ-4)', category: 'Professional', stockLevel: 8, minLevel: 5, unit: 'bottles', lastOrdered: '2026-02-01', status: 'ok' },
+  { id: 'inv5', name: 'Sterile Gloves (Medium)', category: 'Professional', stockLevel: 45, minLevel: 100, unit: 'pairs', lastOrdered: '2026-01-05', status: 'low' },
+  { id: 'inv6', name: 'Olaplex No.3 (Retail)', category: 'Retail', stockLevel: 15, minLevel: 8, unit: 'bottles', lastOrdered: '2026-01-20', status: 'ok' },
 ];
 
-export const INITIAL_APPOINTMENTS: Appointment[] = [
-  { id: 'app1', clientName: 'Alice Fox', clientEmail: 'alice@example.com', staffId: 's1', treatmentId: 'aes1', date: '2026-02-10', time: '10:00', status: 'confirmed' },
-  { id: 'app2', clientName: 'Ben Carter', clientEmail: 'ben@example.com', staffId: 's7', treatmentId: 'hair2', date: '2026-02-10', time: '14:00', status: 'confirmed' },
-  { id: 'app3', clientName: 'Clara Hughes', clientEmail: 'clara@example.com', staffId: 's4', treatmentId: 'nail1', date: '2026-02-11', time: '11:00', status: 'pending' },
-  { id: 'app4', clientName: 'David Lee', clientEmail: 'david@example.com', staffId: 's3', treatmentId: 'body1', date: '2026-02-12', time: '16:00', status: 'confirmed' },
+export interface ClientProfile {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  type: 'VIP' | 'Regular' | 'New' | 'Flagged';
+  totalSpend: number;
+  lastVisit: string;
+  upcomingAppointment?: string; // Date
+  notes: string;
+  avatar: string;
+}
+
+export const CLIENTS: ClientProfile[] = [
+  { id: 'c1', name: 'Sarah Jenkins', email: 'sarah.j@example.com', phone: '07700 900123', type: 'VIP', totalSpend: 4500, lastVisit: '2026-01-20', notes: 'Platinum Member. Prefers quiet appointments. ALWAYS offer sparkling water with lemon. Allergic to latex.', avatar: 'https://i.pravatar.cc/150?u=sarah' },
+  { id: 'c2', name: 'Michael Ross', email: 'mike.ross@example.com', phone: '07700 900456', type: 'Flagged', totalSpend: 120, lastVisit: '2025-11-10', notes: 'FLAGGED: Consistently 15+ mins late. Requires 50% deposit for all future bookings.', avatar: 'https://i.pravatar.cc/150?u=mike' },
+  { id: 'c3', name: 'Emma Thompson', email: 'emma.t@example.com', phone: '07700 900789', type: 'New', totalSpend: 0, lastVisit: 'N/A', upcomingAppointment: '2026-02-14', notes: 'First time visitor. Booked for Bridal Consultation. Interested in skincare package.', avatar: 'https://i.pravatar.cc/150?u=emma' },
+  { id: 'c4', name: 'David Lee', email: 'david@example.com', phone: '07700 900222', type: 'Regular', totalSpend: 850, lastVisit: '2026-01-05', upcomingAppointment: '2026-02-12', notes: 'Regular massage client. Prefers firm pressure.', avatar: 'https://i.pravatar.cc/150?u=david' },
 ];
+
+export interface BusinessMetrics {
+  dailyRevenue: number;
+  dailyTarget: number;
+  weeklyRevenue: number;
+  weeklyTarget: number;
+  utilizationRate: number; // percentage
+  topService: string;
+  staffPerformance: {
+    staffId: string;
+    name: string;
+    revenue: number;
+    utilization: number;
+  }[];
+}
+
+export const METRICS: BusinessMetrics = {
+  dailyRevenue: 1250,
+  dailyTarget: 1500,
+  weeklyRevenue: 8400,
+  weeklyTarget: 10000,
+  utilizationRate: 78,
+  topService: 'HydraFacial MD®',
+  staffPerformance: [
+    { staffId: 'staff-1', name: 'Sarah Chen', revenue: 2500, utilization: 85 },
+    { staffId: 'staff-2', name: 'Marcus Johnson', revenue: 1800, utilization: 70 },
+    { staffId: 'staff-3', name: 'Priya Patel', revenue: 3200, utilization: 92 },
+  ]
+};

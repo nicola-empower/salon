@@ -34,50 +34,61 @@ const unpaidBookings = MOCK_BOOKINGS.filter(
 
                         <div class="payment-list">
                             {
-                                unpaidBookings.map((booking) => (
-                                    <div class="payment-item">
-                                        <div class="payment-info">
-                                            <div class="payment-client">
-                                                {booking.clientName}
-                                            </div>
-                                            <div class="payment-treatment">
-                                                {booking.treatmentName}
-                                            </div>
-                                            <div class="payment-meta">
-                                                {booking.staffName} •{" "}
-                                                {new Date(
-                                                    booking.date,
-                                                ).toLocaleDateString(
-                                                    "en-GB",
-                                                )}{" "}
-                                                {booking.time}
-                                            </div>
-                                        </div>
-                                        <div class="payment-amount">
-                                            <div class="amount-label">
-                                                Amount Due
-                                            </div>
-                                            <div class="amount-value">
-                                                £{booking.price}
-                                            </div>
-                                            {booking.paymentStatus ===
-                                                "deposit" && (
-                                                <div class="amount-note">
-                                                    Deposit paid: £
-                                                    {(
-                                                        booking.price * 0.3
-                                                    ).toFixed(0)}
+                                unpaidBookings.map((booking) => {
+                                    const hasDeposit =
+                                        booking.paymentStatus === "deposit";
+                                    const depositAmount = hasDeposit
+                                        ? Math.round(booking.price * 0.3)
+                                        : 0;
+                                    const amountDue =
+                                        booking.price - depositAmount;
+
+                                    return (
+                                        <div class="payment-item">
+                                            <div class="payment-info">
+                                                <div class="payment-client">
+                                                    {booking.clientName}
                                                 </div>
-                                            )}
+                                                <div class="payment-treatment">
+                                                    {booking.treatmentName}
+                                                </div>
+                                                <div class="payment-meta">
+                                                    {booking.staffName} •{" "}
+                                                    {new Date(
+                                                        booking.date,
+                                                    ).toLocaleDateString(
+                                                        "en-GB",
+                                                    )}{" "}
+                                                    {booking.time}
+                                                </div>
+                                            </div>
+                                            <div class="payment-amount">
+                                                <div class="amount-label">
+                                                    {hasDeposit
+                                                        ? "Remaining Due"
+                                                        : "Amount Due"}
+                                                </div>
+                                                <div class="amount-value">
+                                                    £{amountDue}
+                                                </div>
+                                                {hasDeposit && (
+                                                    <div class="amount-note">
+                                                        Total: £{booking.price}{" "}
+                                                        <br />
+                                                        (Paid Deposit: £
+                                                        {depositAmount})
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <button
+                                                class="btn btn-primary"
+                                                onclick={`selectBooking('${booking.id}', '${booking.clientName}', ${amountDue}, ${depositAmount}, '${booking.staffId}')`}
+                                            >
+                                                Process Payment
+                                            </button>
                                         </div>
-                                        <button
-                                            class="btn btn-primary"
-                                            onclick={`selectBooking('${booking.id}', '${booking.clientName}', ${booking.price})`}
-                                        >
-                                            Process Payment
-                                        </button>
-                                    </div>
-                                ))
+                                    );
+                                })
                             }
 
                             {
@@ -102,58 +113,108 @@ const unpaidBookings = MOCK_BOOKINGS.filter(
                                 >
                                     -
                                 </div>
+
                                 <div
-                                    class="terminal-amount"
-                                    id="terminalAmount"
+                                    style="display: flex; justify-content: space-between; font-size: 0.9rem; color: rgba(255,255,255,0.7); margin-bottom: 0.5rem;"
                                 >
+                                    <span>Service Balance:</span>
+                                    <span id="displayService">£0.00</span>
+                                </div>
+                                <div
+                                    style="display: flex; justify-content: space-between; font-size: 0.9rem; color: #4ade80; margin-bottom: 1rem;"
+                                >
+                                    <span>+ Tip:</span>
+                                    <span id="displayTip">£0.00</span>
+                                </div>
+                                <div
+                                    style="border-top: 1px solid rgba(255,255,255,0.1); margin-bottom: 0.5rem;"
+                                >
+                                </div>
+
+                                <div class="terminal-amount" id="terminalTotal">
                                     £0.00
+                                </div>
+                                <div
+                                    style="font-size: 0.75rem; color: rgba(255,255,255,0.4); margin-top: 0.25rem;"
+                                >
+                                    TOTAL TO CHARGE
                                 </div>
                             </div>
 
-                            <div class="payment-method-selector">
+                            <div
+                                class="form-group"
+                                style="margin-bottom: 1.5rem;"
+                            >
+                                <label
+                                    style="display: block; margin-bottom: 0.5rem; color: #ccc;"
+                                    >Add Gratuity / Tip (£)</label
+                                >
+                                <input
+                                    type="number"
+                                    id="inputTip"
+                                    class="input-field"
+                                    placeholder="0.00"
+                                    min="0"
+                                    step="0.50"
+                                    onchange="updateTotal()"
+                                    onkeyup="updateTotal()"
+                                    style="width: 100%; padding: 0.8rem; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 6px; font-size: 1.1rem;"
+                                />
+                                <div
+                                    style="display: flex; gap: 0.5rem; margin-top: 0.5rem;"
+                                >
+                                    <button class="btn-xs" onclick="setTip(0)"
+                                        >No Tip</button
+                                    >
+                                    <button class="btn-xs" onclick="setTip(5)"
+                                        >£5</button
+                                    >
+                                    <button class="btn-xs" onclick="setTip(10)"
+                                        >£10</button
+                                    >
+                                    <button
+                                        class="btn-xs"
+                                        onclick="setTipPct(0.1)">10%</button
+                                    >
+                                </div>
+                            </div>
+
+                            <div
+                                class="payment-method-selector grid-2"
+                                style="grid-template-columns: repeat(2, 1fr);"
+                            >
                                 <button
                                     class="payment-method-btn active"
                                     data-method="card"
                                 >
-                                    <span style="font-size: 1.5rem;">💳</span>
-                                    <span>Card</span>
+                                    <span style="font-size: 1.2rem;"
+                                        >💳 Card</span
+                                    >
                                 </button>
                                 <button
                                     class="payment-method-btn"
                                     data-method="cash"
                                 >
-                                    <span style="font-size: 1.5rem;">💷</span>
-                                    <span>Cash</span>
+                                    <span style="font-size: 1.2rem;"
+                                        >💷 Cash</span
+                                    >
                                 </button>
                                 <button
                                     class="payment-method-btn"
-                                    data-method="online"
+                                    data-method="transfer"
                                 >
-                                    <span style="font-size: 1.5rem;">📱</span>
-                                    <span>Online</span>
-                                </button>
-                            </div>
-
-                            <div class="card-simulator" id="cardSimulator">
-                                <div class="card-display">
-                                    <div class="card-chip"></div>
-                                    <div class="card-number">
-                                        **** **** **** 4242
-                                    </div>
-                                    <div class="card-name">
-                                        MOCK PAYMENT CARD
-                                    </div>
-                                </div>
-
-                                <div class="card-instructions">
-                                    <p>✓ Card inserted</p>
-                                    <p>✓ PIN verified</p>
-                                    <p
-                                        style="color: var(--color-accent); font-weight: 600;"
+                                    <span style="font-size: 1.2rem;"
+                                        >🏦 Transfer</span
                                     >
-                                        Ready to process
-                                    </p>
-                                </div>
+                                </button>
+                                <button
+                                    class="payment-method-btn"
+                                    data-method="account"
+                                >
+                                    <span style="font-size: 1.2rem;"
+                                        >📋 Account</span
+                                    >
+                                </button>
                             </div>
 
                             <button
@@ -173,17 +234,28 @@ const unpaidBookings = MOCK_BOOKINGS.filter(
                                 ✓
                             </div>
                             <h3 style="color: #4CAF50;">Payment Successful!</h3>
-                            <p
-                                style="color: rgba(255, 255, 255, 0.6); margin: 1rem 0;"
+                            <div
+                                id="receiptDetails"
+                                style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px; margin: 1rem 0; text-align: left; font-size: 0.9rem;"
                             >
-                                Transaction completed
-                            </p>
-                            <button
-                                class="btn btn-outline"
-                                onclick="resetTerminal()"
+                                <!-- Receipt details injected here -->
+                            </div>
+                            <div
+                                style="display: flex; gap: 1rem; justify-content: center;"
                             >
-                                New Payment
-                            </button>
+                                <button
+                                    class="btn btn-primary"
+                                    onclick="alert('Rebooking interface would open here with pre-filled details.')"
+                                >
+                                    📅 Book Next
+                                </button>
+                                <button
+                                    class="btn btn-outline"
+                                    onclick="resetTerminal()"
+                                >
+                                    Next Client
+                                </button>
+                            </div>
                         </div>
 
                         <div
@@ -199,38 +271,128 @@ const unpaidBookings = MOCK_BOOKINGS.filter(
     </main>
 
     <script is:inline>
-        let selectedBooking = null;
+        let currentBooking = null;
+        let currentServiceAmount = 0;
 
-        function selectBooking(id, clientName, amount) {
-            selectedBooking = { id, clientName, amount };
+        function selectBooking(
+            id,
+            clientName,
+            amountDue,
+            depositPaid,
+            staffId,
+        ) {
+            currentBooking = {
+                id,
+                clientName,
+                amountDue,
+                depositPaid,
+                staffId,
+            };
+            currentServiceAmount = amountDue;
+
+            // Reset UI
             document.getElementById("paymentIdle").style.display = "none";
             document.getElementById("paymentSuccess").style.display = "none";
             document.getElementById("paymentForm").style.display = "block";
+
+            // Set Data
             document.getElementById("terminalClient").textContent = clientName;
-            document.getElementById("terminalAmount").textContent =
-                `£${amount}`;
+            document.getElementById("inputTip").value = "";
+
+            updateTotal();
+        }
+
+        function setTip(amount) {
+            document.getElementById("inputTip").value = amount;
+            updateTotal();
+        }
+
+        function setTipPct(pct) {
+            const tip = (currentServiceAmount * pct).toFixed(2);
+            document.getElementById("inputTip").value = tip;
+            updateTotal();
+        }
+
+        function updateTotal() {
+            const tipInput = document.getElementById("inputTip").value;
+            const tip = parseFloat(tipInput) || 0;
+            const total = currentServiceAmount + tip;
+
+            document.getElementById("displayService").textContent =
+                `£${currentServiceAmount.toFixed(2)}`;
+            document.getElementById("displayTip").textContent =
+                `£${tip.toFixed(2)}`;
+            document.getElementById("terminalTotal").textContent =
+                `£${total.toFixed(2)}`;
         }
 
         function processPayment() {
-            if (!selectedBooking) return;
+            if (!currentBooking) return;
 
-            // Simulate payment processing
+            const tipInput = document.getElementById("inputTip").value;
+            const tip = parseFloat(tipInput) || 0;
+            const total = currentServiceAmount + tip;
+            const method = document
+                .querySelector(".payment-method-btn.active")
+                .getAttribute("data-method")
+                .toUpperCase();
+
+            // ACTUAL SYNC
+            // Get existing or init
+            const storeKey = "salon_transactions";
+            const existing = localStorage.getItem(storeKey);
+            const transactions = existing ? JSON.parse(existing) : [];
+
+            // Add new
+            // We need staffId from booking to attribute tips!
+            // In the real app booking would have staffId, here we will simulate or grab if available.
+            // Looking at the template, we didn't pass staffId to selectBooking.
+            // We should pass it. But for now let's hack it or find it.
+            // Actually, let's pass it properly in the next step. For now assume generic.
+
+            // Wait, I can pass it in selectBooking call in key areas.
+
+            transactions.push({
+                id: `txn-${Date.now()}`,
+                amount: currentServiceAmount,
+                tip: tip,
+                staffId: currentBooking.staffId || "staff-1", // Fallback or needs update
+                method: method,
+                timestamp: Date.now(),
+            });
+
+            localStorage.setItem(storeKey, JSON.stringify(transactions));
+            window.dispatchEvent(new Event("transaction-updated"));
+
             document.getElementById("paymentForm").style.display = "none";
             document.getElementById("paymentSuccess").style.display = "block";
 
-            // In real app, would update booking payment status here
-            setTimeout(() => {
-                // Could refresh page or update UI without refresh
-            }, 2000);
+            // Show Receipt
+            const receiptHtml = `
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+                    <span>Method:</span> <strong>${method}</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+                    <span>Service:</span> <span>£${currentServiceAmount.toFixed(2)}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem; color: #4ade80;">
+                    <span>Tip (To Staff):</span> <span>£${tip.toFixed(2)}</span>
+                </div>
+                <div style="border-top: 1px solid rgba(255,255,255,0.2); margin: 0.5rem 0;"></div>
+                <div style="display: flex; justify-content: space-between; font-weight: bold;">
+                    <span>TOTAL PAID:</span> <span>£${total.toFixed(2)}</span>
+                </div>
+            `;
+            document.getElementById("receiptDetails").innerHTML = receiptHtml;
         }
 
         function resetTerminal() {
-            selectedBooking = null;
+            currentBooking = null;
             document.getElementById("paymentSuccess").style.display = "none";
             document.getElementById("paymentIdle").style.display = "block";
         }
 
-        // Payment method selection
+        // Methods
         document.querySelectorAll(".payment-method-btn").forEach((btn) => {
             btn.addEventListener("click", function () {
                 document
