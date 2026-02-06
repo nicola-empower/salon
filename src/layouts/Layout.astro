@@ -4,6 +4,7 @@ import "../styles/animations.css";
 import "../styles/enhancements.css";
 import Navigation from "../components/Navigation.astro";
 import Footer from "../components/Footer.astro";
+import { Toaster } from "sonner";
 
 interface Props {
 	title: string;
@@ -28,6 +29,7 @@ const { title } = Astro.props;
 	<body>
 		<Navigation />
 		<slot />
+		<Toaster client:idle position="bottom-right" theme="dark" richColors />
 		<Footer />
 
 		<!-- Native Scroll Animations -->

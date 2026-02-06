@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import type { StaffProfile } from '../../types/booking';
-import { INITIAL_APPOINTMENTS } from '../../data/mockData';
+import { INITIAL_APPOINTMENTS, TREATMENTS } from '../../data/mockData';
+import { toast } from 'sonner';
 
 interface StaffPortalProps {
     staff: StaffProfile;
@@ -9,6 +10,7 @@ interface StaffPortalProps {
 
 const StaffPortal: React.FC<StaffPortalProps> = ({ staff, onLogout }) => {
     const [view, setView] = useState<'diary' | 'performance' | 'stock'>('diary');
+    const [selectedDate, setSelectedDate] = useState<string>('2026-02-23'); // Default to the demo week monday
     const [tips, setTips] = useState(0);
 
     React.useEffect(() => {
@@ -33,9 +35,9 @@ const StaffPortal: React.FC<StaffPortalProps> = ({ staff, onLogout }) => {
         return () => window.removeEventListener('transaction-updated', updateTips);
     }, [staff.id]);
 
-    // Filter appointments for this staff member and SORT by time
+    // Filter appointments for this staff member and SORT by time for the SELECTED DATE
     const myAppointments = INITIAL_APPOINTMENTS
-        .filter(app => app.staffId === staff.id)
+        .filter(app => app.staffId === staff.id && app.date === selectedDate)
         .sort((a, b) => a.time.localeCompare(b.time));
 
     return (
@@ -73,7 +75,15 @@ const StaffPortal: React.FC<StaffPortalProps> = ({ staff, onLogout }) => {
                 {view === 'diary' && (
                     <div className="fade-in">
                         <div className="diary-timeline">
-                            <h3>Today's Schedule</h3>
+                            <div className="flex-between mb-4">
+                                <h3>Daily Schedule</h3>
+                                <input
+                                    type="date"
+                                    value={selectedDate}
+                                    onChange={(e) => setSelectedDate(e.target.value)}
+                                    className="bg-transparent border border-white/20 rounded px-2 py-1 text-white text-sm"
+                                />
+                            </div>
                             {myAppointments.length === 0 ? (
                                 <p className="empty-state">No appointments scheduled for today.</p>
                             ) : (
@@ -85,15 +95,24 @@ const StaffPortal: React.FC<StaffPortalProps> = ({ staff, onLogout }) => {
                                     >
                                         <div className="time-col">
                                             <span className="time">{app.time}</span>
-                                            {/* Duration/Price not in partial Appointment type, mock or extend if needed */}
-                                            <span className="duration">60m</span>
+                                            {(() => {
+                                                const treatment = TREATMENTS.find(t => t.id === app.treatmentId);
+                                                return <span className="duration">{treatment ? `${treatment.duration}m` : '60m'}</span>;
+                                            })()}
                                         </div>
                                         <div className="details-col">
                                             <h4>{app.clientName}</h4>
                                             <p>{app.treatmentId}</p>
                                         </div>
                                         <div className="action-col">
-                                            {app.status === 'confirmed' && <button className="btn-checkin">Check In</button>}
+                                            {app.status === 'confirmed' && (
+                                                <button
+                                                    className="btn-checkin"
+                                                    onClick={() => toast.success(`Checked in ${app.clientName}`, { icon: '✅' })}
+                                                >
+                                                    Check In
+                                                </button>
+                                            )}
                                         </div>
                                     </div>
                                 ))
@@ -132,7 +151,12 @@ const StaffPortal: React.FC<StaffPortalProps> = ({ staff, onLogout }) => {
                             <textarea placeholder="Any additional details..."></textarea>
                         </div>
 
-                        <button className="btn-submit">Submit Report</button>
+                        <button
+                            className="btn-submit"
+                            onClick={() => toast.error('Stock issue reported', { description: 'Manager has been notified.' })}
+                        >
+                            Submit Report
+                        </button>
                     </div>
                 )}
 

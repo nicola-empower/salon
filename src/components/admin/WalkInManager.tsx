@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import type { Staff } from '../../data/mockData';
+import { toast } from 'sonner';
 
 interface WalkInManagerProps {
     staff: any[];
@@ -140,7 +141,12 @@ const WalkInManager: React.FC<WalkInManagerProps> = ({ staff, appointments }) =>
                             <button
                                 className="btn-action"
                                 disabled={info.status === 'busy' || info.status === 'off' || info.status === 'break'}
-                                onClick={() => alert(`Assign Walk-In to ${member.name}?`)}
+                                onClick={() => {
+                                    toast.success(`Assigned walk-in client to ${member.name}`, {
+                                        description: 'Client checked in and notified.',
+                                        duration: 4000,
+                                    });
+                                }}
                             >
                                 {info.status === 'busy' ? 'Wait' : info.status === 'break' ? 'On Break' : 'Assign Walk-In'}
                             </button>

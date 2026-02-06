@@ -60,7 +60,7 @@ const currentYear = new Date().getFullYear();
                     </li>
                     <li>
                         <strong>Email:</strong><br />
-                        <a href="mailto:hello@thesalon.london"
+                        <a href="mailto:nicola@empowerdigitalsolutions.co.uk"
                             >hello@thesalon.london</a
                         >
                     </li>
@@ -80,6 +80,24 @@ const currentYear = new Date().getFullYear();
                     onmouseout="this.style.color='rgba(255, 255, 255, 0.4)'"
                 >
                     Designed by Empower Digital Solutions
+                </a>
+                <span class="separator">|</span>
+                <a
+                    href="https://empowerdigitalsolutions.co.uk/case-studies/the-salon"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="footer-meta-link"
+                >
+                    Case Study
+                </a>
+                <span class="separator">|</span>
+                <a
+                    href="https://empowerdigitalsolutions.co.uk/insights/why-i-stopped-renting-my-business-brain/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="footer-meta-link"
+                >
+                    Blog Post
                 </a>
             </p>
             <div class="admin-link">
@@ -214,5 +232,29 @@ const currentYear = new Date().getFullYear();
             gap: 1rem;
             text-align: center;
         }
+
+        .separator {
+            display: none;
+        }
+
+        .footer-meta-link {
+            display: block;
+            margin: 0.5rem 0;
+        }
+    }
+
+    .separator {
+        margin: 0 0.5rem;
+        color: rgba(255, 255, 255, 0.2);
+    }
+
+    .footer-meta-link {
+        color: rgba(255, 255, 255, 0.4);
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    .footer-meta-link:hover {
+        color: var(--color-gold);
     }
 </style>

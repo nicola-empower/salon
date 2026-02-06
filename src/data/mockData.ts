@@ -106,45 +106,107 @@ const generateAppointments = () => {
   // Helper to get random item from array
   const random = <T>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
 
+  // Staff IDs
+  const staffIds = ['staff-1', 'staff-2', 'staff-3', 'staff-4', 'staff-5', 'staff-6', 'staff-7', 'staff-8'];
+
+  // Helper to check if a time slot is available
+  // Returns true if available, false if collision
+  const isSlotAvailable = (
+    staffId: string,
+    date: string,
+    startTimeStr: string,
+    durationMinutes: number
+  ): boolean => {
+    const buffer = 15; // 15 min buffer
+
+    // Parse start time
+    const [startH, startM] = startTimeStr.split(':').map(Number);
+    const startMinutes = startH * 60 + startM;
+    const endMinutes = startMinutes + durationMinutes + buffer;
+
+    // Check against existing appointments for this staff on this day
+    const existingApps = apps.filter(a => a.staffId === staffId && a.date === date);
+
+    for (const app of existingApps) {
+      // Find treatment duration for this app
+      const appTreatment = TREATMENTS.find(t => t.id === app.treatmentId);
+      const appDuration = appTreatment ? appTreatment.duration : 60; // Default fallback
+
+      const [appStartH, appStartM] = app.time.split(':').map(Number);
+      const appStartMinutes = appStartH * 60 + appStartM;
+      const appEndMinutes = appStartMinutes + appDuration + buffer; // Existing app also has buffer
+
+      // Check overlap: (StartA < EndB) and (EndA > StartB)
+      if (startMinutes < appEndMinutes && endMinutes > appStartMinutes) {
+        return false; // Collision
+      }
+    }
+
+    return true; // Available
+  };
+
   const statuses: Appointment['status'][] = ['confirmed', 'confirmed', 'confirmed', 'pending'];
-  const times = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'];
+  // Granular start times (every 30 mins) to allow for varied durations
+  const possibleStartTimes = [
+    '09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
+    '12:00', '12:30', '13:00', '13:30', '14:00', '14:30',
+    '15:00', '15:30', '16:00', '16:30', '17:00'
+  ];
   const clientNames = ['Alice Fox', 'Ben Carter', 'Clara Hughes', 'David Lee', 'Emma Thompson', 'Fiona Green', 'George Hall', 'Hannah Wright'];
 
   let idCounter = 1;
 
+  // 1. Add Fixed Appointments FIRST to ensure they reserve their slots
+  const fixedAppsRaw = [
+    { clientName: 'Sarah Jenkins', clientEmail: 'sarah@test.com', staffId: 'staff-1', treatmentId: 'hair2', date: '2026-02-23', time: '10:00', status: 'confirmed' },
+    { clientName: 'Mike Ross', clientEmail: 'mike@test.com', staffId: 'staff-2', treatmentId: 'hair1', date: '2026-02-23', time: '11:00', status: 'confirmed' },
+    { clientName: 'Emma Watson', clientEmail: 'emma@test.com', staffId: 'staff-3', treatmentId: 'skin2', date: '2026-02-24', time: '14:00', status: 'pending' },
+    { clientName: 'Tom Hardy', clientEmail: 'tom@test.com', staffId: 'staff-2', treatmentId: 'hair3', date: '2026-02-25', time: '09:00', status: 'confirmed' }
+  ];
+
+  fixedAppsRaw.forEach(f => {
+    apps.push({
+      id: `fixed-${idCounter++}`,
+      ...f
+    } as Appointment);
+  });
+
+  // 2. Generate Random Appointments filling gaps
   for (let day = startDay; day <= endDay; day++) {
     // Generate 3-6 appointments per day
-    const numApps = Math.floor(Math.random() * 4) + 3;
     const dayStr = `2026-02-${day.toString().padStart(2, '0')}`;
 
-    // Shuffle times to avoid collisions
-    const shuffledTimes = [...times].sort(() => 0.5 - Math.random());
+    // Instead of completely random, iterate staff to ensure we try to fill schedules
+    // Choose a random subset of staff working this day
+    const activeStaff = staffIds.filter(() => Math.random() > 0.4);
 
-    for (let i = 0; i < numApps; i++) {
-      // Pick a specialized staff for a random treatment if possible, or just random
-      // For simplicity in mock data generation, we'll just pick random valid pairs manually or loosely
-      const staffId = random(['staff-1', 'staff-2', 'staff-3', 'staff-4', 'staff-5', 'staff-6', 'staff-7', 'staff-8']);
-      const treatment = random(TREATMENTS);
+    for (const staffId of activeStaff) {
+      const targetApps = Math.floor(Math.random() * 3) + 2; // 2-4 apps
+      let appsAdded = 0;
+      let attempts = 0;
+      const shuffledTimes = [...possibleStartTimes].sort(() => 0.5 - Math.random());
 
-      apps.push({
-        id: `app-${idCounter++}`,
-        clientName: random(clientNames),
-        clientEmail: 'client@example.com',
-        staffId: staffId,
-        treatmentId: treatment.id,
-        date: dayStr,
-        time: shuffledTimes[i],
-        status: random(statuses)
-      });
+      while (appsAdded < targetApps && attempts < shuffledTimes.length) {
+        const time = shuffledTimes[attempts];
+        const treatment = random(TREATMENTS);
+
+        if (isSlotAvailable(staffId, dayStr, time, treatment.duration)) {
+          apps.push({
+            id: `app-${idCounter++}`,
+            clientName: random(clientNames),
+            clientEmail: 'client@example.com',
+            staffId: staffId,
+            treatmentId: treatment.id,
+            date: dayStr,
+            time: time,
+            status: random(statuses)
+          });
+          appsAdded++;
+        }
+        attempts++;
+      }
     }
   }
-
-  // Add specific ones for the user's specific "Week of 23 Feb" screenshot check
-  // Monday 23rd Feb 2026
-  apps.push({ id: 'fixed-1', clientName: 'Sarah Jenkins', clientEmail: 'sarah@test.com', staffId: 'staff-1', treatmentId: 'hair2', date: '2026-02-23', time: '10:00', status: 'confirmed' });
-  apps.push({ id: 'fixed-2', clientName: 'Mike Ross', clientEmail: 'mike@test.com', staffId: 'staff-2', treatmentId: 'hair1', date: '2026-02-23', time: '11:00', status: 'confirmed' });
-  apps.push({ id: 'fixed-3', clientName: 'Emma Watson', clientEmail: 'emma@test.com', staffId: 'staff-3', treatmentId: 'skin2', date: '2026-02-24', time: '14:00', status: 'pending' });
-  apps.push({ id: 'fixed-4', clientName: 'Tom Hardy', clientEmail: 'tom@test.com', staffId: 'staff-2', treatmentId: 'hair3', date: '2026-02-25', time: '09:00', status: 'confirmed' });
 
   return apps;
 };
