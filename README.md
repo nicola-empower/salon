@@ -43,10 +43,14 @@ It combines cutting-edge AI utility with a premium, aesthetic-first interface to
     *   Timeline view of all staff.
     *   **Visual Statuses:** See immediately who is "Checked In", "Confirmed", or on a "Lunch Break" (hashed grey blocks).
 2.  **Financial Ecosystem:**
-    *   **Real-Time Sync:** Payments processed at reception update the Manager's Revenue and Staff's Tip jar instantly via a local event bus.
-3.  **Inventory Intelligence:**
-    *   Track stock levels specifically for professional use (Botox vials) vs retail (Shampoo).
-    *   One-click "Wastage Reports" from the staff portal.
+    *   **Real-Time Sync:** Payments processed at reception update the Manager's Revenue and Staff's Tip jar instantly.
+    *   **Settings Panel:** Global configuration for opening hours, tax rates, and cancellation policies.
+3.  **Marketing & Growth Hub:**
+    *   **Campaign Manager:** Track ROI on Email/SMS blasts.
+    *   **Automations:** "Set and forget" flows like Birthday discounts and Re-booking reminders.
+4.  **Service Menu Manager:**
+    *   Full control over treatments, pricing, and durations without needing a developer.
+    *   **Inventory Intelligence:** Track professional stock vs retail products.
 
 ### 🛎️ For Reception (Front of House)
 1.  **Walk-In Triage:**
@@ -75,28 +79,31 @@ Built on a modern "Island Architecture" stack for blazing fast performance and r
 
 ---
 
-## 💎 Future Roadmap
-*   **Dynamic Pricing:** Auto-discount slots during quiet hours (e.g., "Happy Hour Blow Dry").
-*   **Smart Re-booking:** AI-triggered emails: *"It's been 6 weeks since your cut, Sarah has a slot on Tuesday."*
-*   **White-labeling:** The "Brain" booking engine is abstracted enough to be resold as a standalone SaaS product to other salons.
+## 💎 Valuation & Cost Breakdown
+> **See full breakdown: [VALUATION.md](./VALUATION.md)**
 
----
-
-## 💰 Financial Impact & ROI
+This platform represents a significant asset with a build valuation of **£32,000 - £50,000**.
 
 ### The "SaaS Trap" vs. Custom Ownership
 Most salons rent their digital brain. "The Salon" owns it.
 
 | Feature | Competitor (e.g., Phorest/Timely) | This Custom Platform | Impact |
 | :--- | :--- | :--- | :--- |
-| **Base Platform** | £150 - £300 / month | £0 (Owned IP) | **Save ~£2,400/yr** |
-| **Staff Licenses** | +£20 / staff member | Unlimited Staff | **Scales infinitely** |
-| **Marketplace Fees** | 20% of New Client Booking (Fresha/Treatwell) | 0% Commission | **Save £1,000s/mo** |
-| **Marketing Emails** | Tiered pricing / SMS costs | Custom Integration (AWS SES/Twilio) | **90% cheaper** |
+| **Base Platform** | £250 - £300 / month | £0 (Owned IP) | **Save ~£3,000/yr** |
+| **Staff Licenses** | +£50 / staff member | Unlimited Staff | **Scales infinitely** |
+| **Marketplace Fees** | 20% of New Client Booking (Fresha) | 0% Commission | **Save £1,000s/mo** |
+| **Marketing Emails** | Tiered pricing / SMS costs | Custom Integration (AWS/Twilio) | **90% cheaper** |
 | **Custom Branding** | Generic Templates | Fully Bespoke "Glass" UI | **Premium Brand Equity** |
 
-### **Total Annual Savings: £5,000 - £15,000+**
+**Total 5-Year Savings: £60,000 - £100,000+**  
 *Plus the intangible value of improved data ownership and brand prestige.*
+
+---
+
+## 💎 Future Roadmap
+*   **Dynamic Pricing:** Auto-discount slots during quiet hours (e.g., "Happy Hour Blow Dry").
+*   **Smart Re-booking:** AI-triggered emails: *"It's been 6 weeks since your cut, Sarah has a slot on Tuesday."*
+*   **White-labeling:** The "Brain" booking engine is abstracted enough to be resold as a standalone SaaS product to other salons.
 
 ---
 

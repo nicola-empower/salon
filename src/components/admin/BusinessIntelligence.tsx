@@ -143,7 +143,43 @@ const BusinessIntelligence = () => {
                     color: rgba(255, 255, 255, 0.7);
                     font-size: 0.9rem;
                 }
+                
+                .reports-list {
+                    background: var(--color-surface);
+                    border: 1px solid rgba(255,255,255,0.05);
+                    border-radius: 12px;
+                    padding: 1.5rem;
+                }
+                .report-item {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 0.75rem 0;
+                    border-bottom: 1px solid rgba(255,255,255,0.05);
+                    color: rgba(255,255,255,0.8);
+                    font-size: 0.9rem;
+                    cursor: pointer;
+                }
+                .report-item:last-child { border-bottom: none; }
+                .report-item:hover { color: var(--color-accent); }
             `}</style>
+
+            <div className="reports-list">
+                <h4 style={{ marginBottom: '1rem', color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem' }}>Quick Reports</h4>
+
+                <div className="report-item">
+                    <span>📄 End of Day Report</span>
+                    <small>↓ PDF</small>
+                </div>
+                <div className="report-item">
+                    <span>📊 Staff Performance</span>
+                    <small>↓ CSV</small>
+                </div>
+                <div className="report-item">
+                    <span>💰 VAT/Tax Summary</span>
+                    <small>↓ PDF</small>
+                </div>
+            </div>
         </div>
     );
 };

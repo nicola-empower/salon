@@ -3,6 +3,9 @@ import AIOpsAssistant from './AIOpsAssistant';
 import BusinessIntelligence from './BusinessIntelligence';
 import InventoryPanel from './InventoryPanel';
 import SmartRota from './SmartRota';
+import ServiceMenuManager from './ServiceMenuManager';
+import MarketingHub from './MarketingHub';
+import SettingsPanel from './SettingsPanel';
 import { CLIENTS } from '../../data/mockData';
 
 interface ManagerDashboardProps {
@@ -12,7 +15,7 @@ interface ManagerDashboardProps {
 }
 
 const ManagerDashboard: React.FC<ManagerDashboardProps> = ({ staff = [], onAddStaff, onRemoveStaff }) => {
-    const [view, setView] = useState<'overview' | 'rota' | 'crm' | 'team'>('overview');
+    const [view, setView] = useState<'overview' | 'rota' | 'crm' | 'team' | 'services' | 'marketing' | 'settings'>('overview');
     const [isAddingStaff, setIsAddingStaff] = useState(false);
     const [newStaff, setNewStaff] = useState({ name: '', role: '', color: '#000000' });
 
@@ -53,13 +56,31 @@ const ManagerDashboard: React.FC<ManagerDashboardProps> = ({ staff = [], onAddSt
                     className={view === 'team' ? 'tab active' : 'tab'}
                     onClick={() => setView('team')}
                 >
-                    Team Management
+                    Team
+                </button>
+                <button
+                    className={view === 'services' ? 'tab active' : 'tab'}
+                    onClick={() => setView('services')}
+                >
+                    Services
+                </button>
+                <button
+                    className={view === 'marketing' ? 'tab active' : 'tab'}
+                    onClick={() => setView('marketing')}
+                >
+                    Marketing
                 </button>
                 <button
                     className={view === 'crm' ? 'tab active' : 'tab'}
                     onClick={() => setView('crm')}
                 >
-                    Client CRM
+                    CRM
+                </button>
+                <button
+                    className={view === 'settings' ? 'tab active' : 'tab'}
+                    onClick={() => setView('settings')}
+                >
+                    Settings
                 </button>
             </div>
 
@@ -71,6 +92,13 @@ const ManagerDashboard: React.FC<ManagerDashboardProps> = ({ staff = [], onAddSt
                         <InventoryPanel />
                     </div>
                 )}
+
+                {view === 'rota' && (
+                    <div className="fade-in">
+                        <SmartRota staff={staff} />
+                    </div>
+                )}
+
                 {view === 'team' && (
                     <div className="fade-in">
                         <div className="flex-between mb-4">
@@ -131,6 +159,10 @@ const ManagerDashboard: React.FC<ManagerDashboardProps> = ({ staff = [], onAddSt
                     </div>
                 )}
 
+                {view === 'services' && <ServiceMenuManager />}
+
+                {view === 'marketing' && <MarketingHub />}
+
                 {view === 'crm' && (
                     <div className="fade-in">
                         <h3>Client Relationship Manager</h3>
@@ -162,34 +194,34 @@ const ManagerDashboard: React.FC<ManagerDashboardProps> = ({ staff = [], onAddSt
                     </div>
                 )}
 
-                {view === 'rota' && (
-                    <div className="fade-in">
-                        <SmartRota staff={staff} />
-                    </div>
-                )}
+                {view === 'settings' && <SettingsPanel />}
             </div>
 
             <style>{`
                 .manager-nav {
                     display: flex;
-                    gap: 1rem;
+                    gap: 0.5rem;
                     margin-bottom: 2rem;
                     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
                     padding-bottom: 1rem;
+                    overflow-x: auto;
                 }
                 .tab {
                     background: none;
                     border: none;
                     color: rgba(255, 255, 255, 0.6);
-                    font-size: 1rem;
-                    padding: 0.5rem 1rem;
+                    font-size: 0.95rem;
+                    padding: 0.5rem 0.8rem;
                     cursor: pointer;
                     transition: all 0.2s;
+                    white-space: nowrap;
+                    border-radius: 4px;
                 }
-                .tab:hover { color: white; }
+                .tab:hover { color: white; background: rgba(255,255,255,0.05); }
                 .tab.active {
                     color: var(--color-accent);
-                    border-bottom: 2px solid var(--color-accent);
+                    background: rgba(212, 175, 55, 0.1);
+                    border: 1px solid rgba(212, 175, 55, 0.2);
                 }
                 
                 .crm-grid {
@@ -252,6 +284,17 @@ const ManagerDashboard: React.FC<ManagerDashboardProps> = ({ staff = [], onAddSt
                     border-top: 1px solid rgba(255, 255, 255, 0.05);
                     padding-top: 0.75rem;
                 }
+                .input {
+                    background: rgba(0,0,0,0.3);
+                    border: 1px solid rgba(255,255,255,0.2);
+                    color: white;
+                    padding: 0.5rem;
+                    border-radius: 4px;
+                    width: 100%;
+                }
+                .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; }
+                .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+                .gap-2 { gap: 0.5rem; }
             `}</style>
         </div>
     );
